@@ -51,6 +51,9 @@ function startGame() {
     const guessButton = document.getElementById('guessButton');
     userGuessInput.disabled = false;
     guessButton.disabled = false;
+
+    // Clear the user's previous guess
+    userGuessInput.value = '';
 }
 
 function handleGuess() {
@@ -65,6 +68,9 @@ function handleGuess() {
         guessResult.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
         userGuessInput.disabled = true;
         guessButton.disabled = true;
+
+        // Start a new game after a correct guess
+        setTimeout(startGame, 2000); // Delay for 2 seconds before starting a new game
     } else {
         guessResult.textContent = 'Try again.';
     }
@@ -72,7 +78,9 @@ function handleGuess() {
 
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
-        handleGuess();
+        if (!userGuessInput.disabled) {
+            handleGuess();
+        }
     }
 }
 
