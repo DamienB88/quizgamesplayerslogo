@@ -1,1 +1,47 @@
+/* Basic styling for the body */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styling for the container of club logos */
+#clubLogos {
+    margin: 20px;
+}
+
+/* Styling for the user guess input field and button */
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Styling for the guess result message */
+#guessResult {
+    font-size: 18px;
+    margin: 20px;
+    color: #007bff;
+}
+
+/* Styling for the club logos */
+#clubLogos img {
+    width: 100px;
+    height: auto;
+    margin: 10px;
+}
 
