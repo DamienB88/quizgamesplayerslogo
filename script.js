@@ -70,6 +70,15 @@ function handleGuess() {
     }
 }
 
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        handleGuess();
+    }
+}
+
 document.getElementById('guessButton').addEventListener('click', handleGuess);
+
+const userGuessInput = document.getElementById('userGuess');
+userGuessInput.addEventListener('keypress', handleKeyPress);
 
 window.addEventListener('load', loadJSONData);
