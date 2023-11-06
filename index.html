@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Player Quiz</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <div id="clubLogos"></div>
-    <input type="text" id="userGuess" placeholder="Enter the player's name">
+    <input type="text" id="userGuess" placeholder="Guess the player">
     <button id="guessButton">Guess</button>
-    <p id="guessResult"></p>
+    <div id="guessCount">Guesses: <span id="liveGuessCount">0</span></div>
+    <div id="guessResult"></div>
     <script src="script.js"></script>
 </body>
 </html>
-
