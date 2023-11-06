@@ -21,6 +21,11 @@ function getRandomPlayer() {
     };
 }
 
+function updateLiveGuessCount(count) {
+    const liveGuessCount = document.getElementById('liveGuessCount');
+    liveGuessCount.textContent = count;
+}
+
 function loadJSONData() {
     fetch('data/players.json')
         .then((response) => response.json())
@@ -54,6 +59,7 @@ function startGame() {
     });
 
     numberOfGuesses = 0;
+    updateLiveGuessCount(numberOfGuesses); // Initialize live guess count
 
     const guessResult = document.getElementById('guessResult');
     guessResult.textContent = '';
@@ -86,7 +92,8 @@ function handleGuess() {
             startGame();
         }, 2000); // Delay for 2 seconds before starting a new game
     } else {
-        guessResult.textContent = 'Try again.';
+        // No guess result text content, but update the live guess count
+        updateLiveGuessCount(numberOfGuesses);
     }
 }
 
