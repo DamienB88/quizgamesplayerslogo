@@ -45,3 +45,11 @@ button {
     margin: 10px;
 }
 
+/* Add some margin between elements */
+#userGuess {
+    margin-bottom: 10px;
+}
+
+#guessCount {
+    margin-top: 10px;
+}
