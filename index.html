@@ -2,14 +2,70 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        #container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #clubLogos img {
+            width: 100px;
+            height: auto;
+            margin: 10px;
+        }
+        #userGuess {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #guessButton {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #guessButton:hover {
+            background-color: #0056b3;
+        }
+        #guessCount {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        #liveGuessCount {
+            font-weight: bold;
+            color: #007bff;
+        }
+        #guessResult {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2ecc71; /* Green color for correct guess */
+        }
+    </style>
 </head>
 <body>
-    <div id="clubLogos"></div>
-    <input type="text" id="userGuess" placeholder="Guess the player">
-    <button id="guessButton">Guess</button>
-    <div id="guessCount">Guesses: <span id="liveGuessCount">0</span></div>
-    <div id="guessResult"></div>
+    <div id="container">
+        <div id="clubLogos"></div>
+        <input type="text" id="userGuess" placeholder="Guess the player">
+        <button id="guessButton">Guess</button>
+        <div id="guessCount">Guesses: <span id="liveGuessCount">0</span></div>
+        <div id="guessResult"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
