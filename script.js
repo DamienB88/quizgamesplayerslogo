@@ -2,7 +2,24 @@ let playersData = {};
 let clubsData = {};
 
 let selectedPlayer = {};
+let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
+
+function getRandomPlayer() {
+    const playerNames = Object.keys(playersData);
+    let randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
+
+    // Ensure the selected player is not the same as the last one
+    while (randomPlayerName === lastSelectedPlayer.name) {
+        randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
+    }
+
+    lastSelectedPlayer = selectedPlayer;
+    selectedPlayer = {
+        name: randomPlayerName,
+        clubs: playersData[randomPlayerName]
+    };
+}
 
 function loadJSONData() {
     fetch('data/players.json')
@@ -14,6 +31,7 @@ function loadJSONData() {
         .then((response) => response.json())
         .then((data) => {
             clubsData = data;
+            getRandomPlayer();
             startGame();
         })
         .catch((error) => {
@@ -22,13 +40,6 @@ function loadJSONData() {
 }
 
 function startGame() {
-    const playerNames = Object.keys(playersData);
-    const randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
-    selectedPlayer = {
-        name: randomPlayerName,
-        clubs: playersData[randomPlayerName]
-    };
-
     const clubLogosContainer = document.getElementById('clubLogos');
     clubLogosContainer.innerHTML = '';
 
@@ -70,7 +81,10 @@ function handleGuess() {
         guessButton.disabled = true;
 
         // Start a new game after a correct guess
-        setTimeout(startGame, 2000); // Delay for 2 seconds before starting a new game
+        setTimeout(() => {
+            getRandomPlayer();
+            startGame();
+        }, 2000); // Delay for 2 seconds before starting a new game
     } else {
         guessResult.textContent = 'Try again.';
     }
