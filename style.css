@@ -172,3 +172,8 @@ button {
     width: 30px; /* Adjust width as needed */
     font-size: 24px; /* Adjust font size as needed */
 }
+
+/* Disable horizontal scrolling */
+html, body {
+    overflow-x: hidden;
+}
