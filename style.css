@@ -83,13 +83,17 @@ button {
     margin-bottom: 10px; /* Add more space between the text and flags */
 }
 
-/* Style for nationality buttons (remove backgrounds) */
+/* Style for nationality buttons (remove blue background) */
 .nationalityButton {
     display: inline-block;
     margin: 0 20px; /* Add more space between the flags */
+    padding: 10px;
     font-size: 16px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    color: #007bff;
+    background-color: #f0f0f0; /* Background color for nationality text */
+    color: #007bff; /* Text color for nationality text */
 }
 
 /* Style for flag emojis */
