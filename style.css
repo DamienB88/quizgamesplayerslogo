@@ -86,7 +86,7 @@ button {
 /* Style for nationality buttons (remove blue background) */
 .nationalityButton {
     display: inline-block;
-    margin: 0 20px; /* Add more space between the flags */
+    margin: 0 10px; /* Add more space between the flags */
     padding: 10px;
     font-size: 16px;
     border: none;
