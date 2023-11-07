@@ -26,6 +26,12 @@ function updateLiveGuessCount(count) {
     liveGuessCount.textContent = count;
 }
 
+function displayAnswer() {
+    const answerDisplay = document.getElementById('answer');
+    answerDisplay.textContent = `The correct answer is: ${selectedPlayer.name}`;
+    answerDisplay.style.display = 'block';
+}
+
 function loadJSONData() {
     fetch('data/players.json')
         .then((response) => response.json())
@@ -65,47 +71,57 @@ function startGame() {
     guessResult.textContent = '';
 
     const userGuessInput = document.getElementById('userGuess');
-    const guessButton = document.getElementById('guessButton');
     userGuessInput.disabled = false;
-    guessButton.disabled = false;
 
     // Clear the user's previous guess
     userGuessInput.value = '';
-}
-
-function handleGuess() {
-    const userGuessInput = document.getElementById('userGuess');
-    const guessButton = document.getElementById('guessButton');
-    const guessResult = document.getElementById('guessResult');
-
-    const userGuess = userGuessInput.value;
-    numberOfGuesses++;
-
-    if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
-        guessResult.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
-        userGuessInput.disabled = true;
-        guessButton.disabled = true;
-
-        // Start a new game after a correct guess
-        setTimeout(() => {
-            getRandomPlayer();
-            startGame();
-        }, 2000); // Delay for 2 seconds before starting a new game
-    } else {
-        // No guess result text content, but update the live guess count
-        updateLiveGuessCount(numberOfGuesses);
-    }
+    const answerDisplay = document.getElementById('answer');
+    answerDisplay.style.display = 'none'; // Hide the answer display
 }
 
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
-        if (!userGuessInput.disabled) {
-            handleGuess();
+        if (!document.getElementById('userGuess').disabled) {
+            const userGuess = document.getElementById('userGuess').value;
+            numberOfGuesses++;
+
+            if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
+                const answerDisplay = document.getElementById('answer');
+                answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
+                answerDisplay.style.display = 'block';
+
+                // Disable the input field
+                document.getElementById('userGuess').disabled = true;
+
+                // Start a new game after a correct guess
+                setTimeout(() => {
+                    getRandomPlayer();
+                    startGame();
+                }, 2000); // Delay for 2 seconds before starting a new game
+            } else {
+                // No guess result text content, but update the live guess count
+                updateLiveGuessCount(numberOfGuesses);
+            }
         }
     }
 }
 
-document.getElementById('guessButton').addEventListener('click', handleGuess);
+function handleGiveUp() {
+    const userGuessInput = document.getElementById('userGuess');
+    userGuessInput.disabled = true;
+    document.getElementById('giveUpButton').disabled = true;
+
+    // Display the correct answer
+    displayAnswer();
+
+    // Start a new game after giving up
+    setTimeout(() => {
+        getRandomPlayer();
+        startGame();
+    }, 2000); // Delay for 2 seconds before starting a new game
+}
+
+document.getElementById('giveUpButton').addEventListener('click', handleGiveUp);
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
