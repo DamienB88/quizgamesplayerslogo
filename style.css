@@ -148,3 +148,27 @@ button {
     margin-bottom: 40px; /* Add margin at the bottom */
     font-size: 16px;
 }
+
+/* Style for the "More" button */
+.more-button {
+    font-weight: bold;
+    display: inline-block;
+    margin: 0 5px; /* Add more space between the flags */
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f0f0f0; /* Background color for "More" text */
+    color: #007bff; /* Text color for "More" text */
+    margin-right: 1px; /* Adjust the value as needed for the desired spacing */
+    margin-left: 1px; /* Adjust the value as needed for the desired spacing */
+}
+
+/* Styling for the "More" button's flag emoji */
+.more-button::before {
+    content: " ";
+    display: inline-block;
+    width: 30px; /* Adjust width as needed */
+    font-size: 24px; /* Adjust font size as needed */
+}
