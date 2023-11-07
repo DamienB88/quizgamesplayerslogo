@@ -76,3 +76,38 @@ button {
     width: 30px; /* Adjust the width as needed */
     height: auto; /* Maintain the aspect ratio */
 }
+
+/* Style for the "Select a player nationality" text */
+#nationalityButtons p {
+    font-weight: bold;
+    margin-bottom: 10px; /* Add more space between the text and flags */
+}
+
+/* Style for nationality buttons (remove backgrounds) */
+.nationalityButton {
+    display: inline-block;
+    margin: 0 20px; /* Add more space between the flags */
+    font-size: 16px;
+    cursor: pointer;
+    color: #007bff;
+}
+
+/* Style for flag emojis */
+.nationalityButton::before {
+    content: " ";
+    display: inline-block;
+    width: 30px; /* Adjust width as needed */
+    font-size: 24px; /* Adjust font size as needed */
+}
+
+/* Add hover effect to buttons */
+.nationalityButton:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Add spacing between buttons */
+#nationalityButtons {
+    text-align: center;
+    margin-top: 10px;
+}
