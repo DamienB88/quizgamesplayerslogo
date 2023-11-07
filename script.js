@@ -77,6 +77,16 @@ function startGame() {
     userGuessInput.value = '';
     const answerDisplay = document.getElementById('answer');
     answerDisplay.style.display = 'none'; // Hide the answer display
+
+    // Re-enable the "Give up" button
+    const giveUpButton = document.getElementById('giveUpButton');
+    giveUpButton.disabled = false;
+
+    // Remove the previous "Give up" button click event listener
+    giveUpButton.removeEventListener('click', handleGiveUp);
+
+    // Add a new click event listener to the "Give up" button
+    giveUpButton.addEventListener('click', handleGiveUp);
 }
 
 function handleKeyPress(event) {
@@ -88,7 +98,7 @@ function handleKeyPress(event) {
             if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
                 const answerDisplay = document.getElementById('answer');
                 answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
-                answerDisplay.style.display = 'block';
+                answerDisplay.style display = 'block';
 
                 // Disable the input field
                 document.getElementById('userGuess').disabled = true;
@@ -97,7 +107,7 @@ function handleKeyPress(event) {
                 setTimeout(() => {
                     getRandomPlayer();
                     startGame();
-                }, 2000); // Delay for 4 seconds before starting a new game
+                }, 2000); // Delay for 2 seconds before starting a new game
             } else {
                 // No guess result text content, but update the live guess count
                 updateLiveGuessCount(numberOfGuesses);
@@ -109,7 +119,8 @@ function handleKeyPress(event) {
 function handleGiveUp() {
     const userGuessInput = document.getElementById('userGuess');
     userGuessInput.disabled = true;
-    document.getElementById('giveUpButton').disabled = true;
+    const giveUpButton = document.getElementById('giveUpButton');
+    giveUpButton.disabled = true;
 
     // Display the correct answer
     displayAnswer();
@@ -120,8 +131,6 @@ function handleGiveUp() {
         startGame();
     }, 2000); // Delay for 2 seconds before starting a new game
 }
-
-document.getElementById('giveUpButton').addEventListener('click', handleGiveUp);
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
