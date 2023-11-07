@@ -1,113 +1,32 @@
-let playersData = {};
-let clubsData = {};
-
-let selectedPlayer = {};
-let lastSelectedPlayer = {};
-let numberOfGuesses = 0;
-
-function getRandomPlayer() {
-    const playerNames = Object.keys(playersData);
-    let randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
-
-    // Ensure the selected player is not the same as the last one
-    while (randomPlayerName === lastSelectedPlayer.name) {
-        randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
-    }
-
-    lastSelectedPlayer = selectedPlayer;
-    selectedPlayer = {
-        name: randomPlayerName,
-        clubs: playersData[randomPlayerName]
-    };
-}
-
-function updateLiveGuessCount(count) {
-    const liveGuessCount = document.getElementById('liveGuessCount');
-    liveGuessCount.textContent = count;
-}
-
-function loadJSONData() {
-    fetch('data/players.json')
-        .then((response) => response.json())
-        .then((data) => {
-            playersData = data;
-            return fetch('data/clubs.json');
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            clubsData = data;
-            getRandomPlayer();
-            startGame();
-        })
-        .catch((error) => {
-            console.error('Error loading JSON data:', error);
-        });
-}
-
-function startGame() {
-    const clubLogosContainer = document.getElementById('clubLogos');
-    clubLogosContainer.innerHTML = '';
-
-    selectedPlayer.clubs.forEach((club) => {
-        const clubLogoUrl = clubsData[club];
-        if (clubLogoUrl) {
-            const img = document.createElement('img');
-            img.src = clubLogoUrl;
-            img.alt = club;
-            clubLogosContainer.appendChild(img);
-        }
-    });
-
-    numberOfGuesses = 0;
-    updateLiveGuessCount(numberOfGuesses); // Initialize live guess count
-
-    const guessResult = document.getElementById('guessResult');
-    guessResult.textContent = '';
-
-    const userGuessInput = document.getElementById('userGuess');
-    const guessButton = document.getElementById('guessButton');
-    userGuessInput.disabled = false;
-    guessButton.disabled = false;
-
-    // Clear the user's previous guess
-    userGuessInput.value = '';
-}
-
-function handleGuess() {
-    const userGuessInput = document.getElementById('userGuess');
-    const guessButton = document.getElementById('guessButton');
-    const guessResult = document.getElementById('guessResult');
-
-    const userGuess = userGuessInput.value;
-    numberOfGuesses++;
-
-    if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
-        guessResult.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
-        userGuessInput.disabled = true;
-        guessButton.disabled = true;
-
-        // Start a new game after a correct guess
-        setTimeout(() => {
-            getRandomPlayer();
-            startGame();
-        }, 2000); // Delay for 2 seconds before starting a new game
-    } else {
-        // No guess result text content, but update the live guess count
-        updateLiveGuessCount(numberOfGuesses);
-    }
-}
-
-function handleKeyPress(event) {
-    if (event.key === 'Enter') {
-        if (!userGuessInput.disabled) {
-            handleGuess();
-        }
-    }
-}
-
-document.getElementById('guessButton').addEventListener('click', handleGuess);
-
-const userGuessInput = document.getElementById('userGuess');
-userGuessInput.addEventListener('keypress', handleKeyPress);
-
-window.addEventListener('load', loadJSONData);
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <a href="https://twitter.com/Football_Grid_" id="twitter-link" target="_blank">
+        <img src="images/twitter.svg" alt="Twitter Logo">
+    </a>
+    <div id="container">
+        <img src="images/footballgridogo.png" alt="Your Logo" id="logo"> 
+        <!-- New nationality buttons -->
+        <div id="nationalityButtons">
+            <p>Select a player nationality:</p>
+            <button class="nationalityButton" data-nationality="English">🇬🇧 English</button>
+            <button class "nationalityButton" data-nationality="French">🇫🇷 French</button>
+            <button class="nationalityButton" data-nationality="German">🇩🇪 German</button>
+            <button class="nationalityButton" data-nationality="Dutch">🇳🇱 Dutch</button>
+            <button class="nationalityButton" data-nationality="all">Hardcore mode</button>
+        </div>
+        <!-- End of new nationality buttons -->
+        <div id="clubLogos"></div>
+        <input type="text" id="userGuess" placeholder="Guess the player">
+        <button id="giveUpButton">Give up</button>
+        <div id="guessCount"># Guesses: <span id="liveGuessCount" style="color: red;">0</span></div>
+        <div id="guessResult"></div>
+        <div id="answer" style="display: none;"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
