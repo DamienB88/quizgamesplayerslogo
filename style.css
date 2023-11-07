@@ -6,15 +6,14 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100vh;
 }
 
 /* Styling for the container of club logos */
-#container {
-    padding: 10px; /* Add padding to the container for better mobile spacing */
+#clubLogos {
+    margin: 20px;
 }
 
 /* Styling for the user guess input field and button */
@@ -24,7 +23,6 @@ input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
-    width: 100%; /* Make the input field full width on mobile */
 }
 
 button {
@@ -35,8 +33,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-bottom: 10px; /* Add margin below the button on mobile */
-    width: 100%; /* Make the button full width on mobile */
+    margin-left: 10px;
 }
 
 /* Styling for the guess result message */
@@ -64,15 +61,18 @@ button {
     color: red;
 }
 
-/* Styling for the logo and Twitter link */
 #logo {
-    width: 150px; /* Adjust the size for mobile devices */
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 275px; /* Adjust the width as needed */
+    height: 50px; /* This will maintain the aspect ratio */
 }
 
 #twitter-link {
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 30px;
-    height: auto;
+    width: 30px; /* Adjust the width as needed */
+    height: auto; /* Maintain the aspect ratio */
 }
