@@ -97,7 +97,7 @@ function handleKeyPress(event) {
                 setTimeout(() => {
                     getRandomPlayer();
                     startGame();
-                }, 2000); // Delay for 2 seconds before starting a new game
+                }, 2000); // Delay for 4 seconds before starting a new game
             } else {
                 // No guess result text content, but update the live guess count
                 updateLiveGuessCount(numberOfGuesses);
