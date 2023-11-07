@@ -99,6 +99,7 @@ button {
 /* Apply margin-right to create space between nationality buttons */
 .nationalityButton {
     margin-right: 1px; /* Adjust the value as needed for the desired spacing */
+    margin-left: 1px; /* Adjust the value as needed for the desired spacing */
 }
 
 /* Style for flag emojis */
