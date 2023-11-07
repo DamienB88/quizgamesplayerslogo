@@ -65,7 +65,7 @@ button {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 125px; /* Adjust the width as needed */
+    width: 175px; /* Adjust the width as needed */
     height: 50px; /* This will maintain the aspect ratio */
 }
 
