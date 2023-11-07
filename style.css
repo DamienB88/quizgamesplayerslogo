@@ -80,7 +80,7 @@ button {
 /* Style for the "Select a player nationality" text */
 #nationalityButtons p {
     font-weight: bold;
-    margin-bottom: 15px; /* Add more space between the text and flags */
+    margin-bottom: 10px; /* Add more space between the text and flags */
 }
 
 /* Style for nationality buttons (remove blue background) */
