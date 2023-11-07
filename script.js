@@ -81,12 +81,6 @@ function startGame() {
     // Re-enable the "Give up" button
     const giveUpButton = document.getElementById('giveUpButton');
     giveUpButton.disabled = false;
-
-    // Remove the previous "Give up" button click event listener
-    giveUpButton.removeEventListener('click', handleGiveUp);
-
-    // Add a new click event listener to the "Give up" button
-    giveUpButton.addEventListener('click', handleGiveUp);
 }
 
 function handleKeyPress(event) {
@@ -98,7 +92,7 @@ function handleKeyPress(event) {
             if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
                 const answerDisplay = document.getElementById('answer');
                 answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
-                answerDisplay.style display = 'block';
+                answerDisplay.style.display = 'block';
 
                 // Disable the input field
                 document.getElementById('userGuess').disabled = true;
@@ -134,5 +128,8 @@ function handleGiveUp() {
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
+
+const giveUpButton = document.getElementById('giveUpButton');
+giveUpButton.addEventListener('click', handleGiveUp);
 
 window.addEventListener('load', loadJSONData);
