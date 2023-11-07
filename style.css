@@ -5,6 +5,10 @@ body {
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 /* Styling for the container of club logos */
@@ -18,6 +22,7 @@ input[type="text"] {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 button {
@@ -45,11 +50,13 @@ button {
     margin: 10px;
 }
 
-/* Add some margin between elements */
-#userGuess {
-    margin-bottom: 10px;
+/* Styling for the guess count */
+#guessCount {
+    font-size: 18px;
+    color: #007bff;
+    font-weight: bold;
 }
 
-#guessCount {
-    margin-top: 10px;
+#liveGuessCount {
+    color: red;
 }
