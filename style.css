@@ -135,3 +135,10 @@ button {
     color: #ff0000; /* Red color for the answer text */
     display: none; /* Initially hidden */
 }
+
+/* Add margin at the bottom of the disclaimer text */
+#disclaimerText {
+    margin-top: 20px; /* Add margin at the top */
+    margin-bottom: 40px; /* Add margin at the bottom */
+    font-size: 16px;
+}
