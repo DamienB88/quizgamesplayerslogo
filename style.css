@@ -194,30 +194,3 @@ button {
 html, body {
     overflow-x: hidden;
 }
-
-/* Additional styling for player information */
-#playerDetails {
-    display: none;
-    font-size: 18px;
-    margin: 20px;
-}
-
-#playerName {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-#dateOfBirth {
-    margin-bottom: 10px;
-}
-
-#position {
-    margin-bottom: 10px;
-}
-
-#clubLogos img {
-    width: 100px;
-    height: auto;
-    margin: 10px;
-}
-
