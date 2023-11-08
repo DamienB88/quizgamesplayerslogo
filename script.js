@@ -17,7 +17,9 @@ function getRandomPlayer() {
     lastSelectedPlayer = selectedPlayer;
     selectedPlayer = {
         name: randomPlayerName,
-        clubs: playersData[randomPlayerName]
+        clubs: playersData[randomPlayerName],
+        dateOfBirth: playersData[randomPlayerName].dateOfBirth,
+        position: playersData[randomPlayerName].position,
     };
 }
 
@@ -30,6 +32,30 @@ function displayAnswer() {
     const answerDisplay = document.getElementById('answer');
     answerDisplay.textContent = `The correct answer is: ${selectedPlayer.name}`;
     answerDisplay.style.display = 'block';
+}
+
+function displayPlayerInfo(player) {
+    const playerDetails = document.getElementById('playerDetails');
+    const playerName = document.getElementById('playerName');
+    const dateOfBirth = document.getElementById('dateOfBirth');
+    const position = document.getElementById('position');
+
+    playerName.textContent = `Name: ${player.name}`;
+    
+    // Check if the player has date of birth and position information
+    if (player.dateOfBirth) {
+        dateOfBirth.textContent = `Date of Birth: ${player.dateOfBirth}`;
+    } else {
+        dateOfBirth.textContent = ''; // Clear date of birth if not available
+    }
+
+    if (player.position) {
+        position.textContent = `Position: ${player.position}`;
+    } else {
+        position.textContent = ''; // Clear position if not available
+    }
+
+    playerDetails.style.display = 'block'; // Display player information
 }
 
 function loadJSONData() {
@@ -78,6 +104,9 @@ function startGame() {
     const answerDisplay = document.getElementById('answer');
     answerDisplay.style.display = 'none'; // Hide the answer display
 
+    // Display player information
+    displayPlayerInfo(selectedPlayer);
+
     // Re-enable the "Give up" button
     const giveUpButton = document.getElementById('giveUpButton');
     giveUpButton.disabled = false;
@@ -118,12 +147,6 @@ function handleGiveUp() {
 
     // Display the correct answer
     displayAnswer();
-
-    // Start a new game after giving up
-    setTimeout(() => {
-        getRandomPlayer();
-        startGame();
-    }, 2000); // Delay for 2 seconds before starting a new game
 }
 
 const userGuessInput = document.getElementById('userGuess');
