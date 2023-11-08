@@ -196,3 +196,16 @@ button {
 html, body {
     overflow-x: hidden;
 }
+
+/* Apply styling to the position element */
+#position {
+    width: 100px; /* Adjust the width as needed */
+    height: auto;
+    margin: 10px;
+    margin-bottom: 20px; /* Adjust the value as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold; /* Make the text bold */
+    text-align: center; /* Center the text horizontally */
+}
