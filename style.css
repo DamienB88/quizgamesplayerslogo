@@ -61,20 +61,36 @@ button {
     color: red;
 }
 
-#logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 275px; /* Adjust the width as needed */
-    height: 50px; /* This will maintain the aspect ratio */
+/* Style the header container */
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff; /* Add a background color if needed */
+    padding: 10px; /* Adjust the padding as needed */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a box shadow for a subtle effect */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999; /* Ensure it's above other content */
 }
 
+/* Style the logo in the header */
+#logo {
+    width: 150px; /* Adjust the width as needed */
+    height: auto; /* Maintain the aspect ratio */
+}
+
+/* Style the Twitter logo in the header */
 #twitter-link {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     width: 30px; /* Adjust the width as needed */
     height: auto; /* Maintain the aspect ratio */
+}
+
+/* Add margin to push the content below the fixed header */
+#container {
+    margin-top: 60px; /* Adjust the margin-top as needed */
 }
 
 /* Style for the "Select a player nationality" text */
