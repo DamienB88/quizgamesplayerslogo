@@ -48,6 +48,7 @@ button {
     width: 100px;
     height: auto;
     margin: 10px;
+    margin-bottom: 20px; /* Adjust the value as needed */
 }
 
 /* Styling for the guess count */
