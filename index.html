@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -15,44 +14,33 @@
         <!-- New nationality buttons -->
         <div id="nationalityButtons">
             <p>Select a player nationality:</p>
-            <!-- Buttons for nationalities -->
             <button class="nationalityButton" data-nationality="English">🇬🇧 English</button>
-            <button class= "nationalityButton" data-nationality="French">🇫🇷 French</button>
+            <button class="nationalityButton" data-nationality="French">🇫🇷 French</button>
             <button class="nationalityButton" data-nationality="German">🇩🇪 German</button>
             <button class="nationalityButton" data-nationality="Spanish">🇪🇸 Spanish</button>
             <button class="nationalityButton" data-nationality="Italian">🇮🇹 Italian</button>
             <button class="nationalityButton" data-nationality="all">Hardcore</button>
             <!-- "More" selector dropdown initially hidden -->
-            <select id="moreNationalities" class="more-dropdown">
-                <option value="More">More</option>
-                <option value="Scottish">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish</option>
-                <option value="Swedish">🇸🇪 Swedish</option>
-                <option value="Danish">🇩🇰 Danish</option>
-                <option value="Austrian">🇦🇹 Austrian</option>
-                <option value="Swiss">🇨🇭 Swiss</option>
-                <option value="Belgian">🇧🇪 Belgian</option>
-                <option value="Brazilian">🇧🇷 Brazilian</option>
-            </select>
+<select id="moreNationalities" class="more-dropdown">
+    <option value="More">More</option>
+    <option value="Scottish">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish</option>
+    <option value="Swedish">🇸🇪 Swedish</option>
+    <option value="Danish">🇩🇰 Danish</option>
+    <option value="Austrian">🇦🇹 Austrian</option>
+    <option value="Swiss">🇨🇭 Swiss</option>
+    <option value="Belgian">🇧🇪 Belgian</option>
+    <option value="Brazilian">🇧🇷 Brazilian</option>
+</select>
         </div>
         <!-- End of new nationality buttons -->
-        <!-- Additional player information -->
-        <div id="playerInfo">
-            <div id="clubsLogos"></div>
-            <div id="dateOfBirth"></div>
-            <div id="position"></div>
-            </div>
-        </div>
         <!-- After the nationality buttons -->
         <div id="disclaimerText">
             <p>Club coverage per player might not be exhaustive and may not include teams from third-tier or lower divisions or outside Europe.</p>
         </div>
-        <!-- User input and buttons -->
-        <div id="userInteraction">
-            <input type="text" id="userGuess" placeholder="Guess the player">
-            <button id="giveUpButton">Give up</button>
-            <div id="guessCount"># Guesses: <span id="liveGuessCount" style="color: red;">0</span></div>
-        </div>
-        <!-- Guess result and answer -->
+        <div id="clubLogos"></div>
+        <input type="text" id="userGuess" placeholder="Guess the player">
+        <button id="giveUpButton">Give up</button>
+        <div id="guessCount"># Guesses: <span id="liveGuessCount" style="color: red;">0</span></div>
         <div id="guessResult"></div>
         <div id="answer" style="display: none;"></div>
     </div>
