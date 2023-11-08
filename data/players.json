@@ -1,38 +1,62 @@
 {
-    "Zidane": [
-      "AUSTRIA LUSTENAU",
-      "AUSTRIA WIEN",
-      "FC BLAU WEISS LINZ",
-      "LASK",
-      "RAPID WIEN"
-    ],
-    "Ronaldo": [
-      "RB SALZBURG",
-      "SCR ALTACH",
-      "FC DORNBIRN",
-      "KAPFENBERGER SV 1919",
-      "GRAZER AK"
-    ],
-    "Benzema": [
-      "TSV HARTBERG",
-      "WOLFSBERGER AC",
-      "FC LIEFERING",
-      "SCHWARZ WEISS BREGENZ",
-      "STURM GRAZ A"
-    ],
-    "Mbappe": [
-      "SK AUSTRIA KLAGENFURT",
-      "WSG TIROL",
-      "FIRST VIENNA FC",
-      "SKN ST POELTEN",
-      "SV HORN"
-    ],
-    "Messi": [
-      "STURM GRAZ",
-      "FC ADMIRA WACKER",
-      "FLORIDSDORFER AC",
-      "SKU AMSTETTEN",
-      "SV LAFNITZ"
-    ]
-  }
-  
+    "Zidane": {
+        "clubs": [
+            "AUSTRIA LUSTENAU",
+            "AUSTRIA WIEN",
+            "FC BLAU WEISS LINZ",
+            "LASK",
+            "RAPID WIEN"
+        ],
+        "nationality": "French",
+        "dateOfBirth": "08-08-1988",
+        "position": "Goalkeeper"
+    },
+    "Ronaldo": {
+        "clubs": [
+            "RB SALZBURG",
+            "SCR ALTACH",
+            "FC DORNBIRN",
+            "KAPFENBERGER SV 1919",
+            "GRAZER AK"
+        ],
+        "nationality": "Portuguese",
+        "dateOfBirth": "05-02-1985",
+        "position": "Forward"
+    },
+    "Benzema": {
+        "clubs": [
+            "TSV HARTBERG",
+            "WOLFSBERGER AC",
+            "FC LIEFERING",
+            "SCHWARZ WEISS BREGENZ",
+            "STURM GRAZ A"
+        ],
+        "nationality": "French",
+        "dateOfBirth": "19-12-1987",
+        "position": "Defender"
+    },
+    "Mbappe": {
+        "clubs": [
+            "SK AUSTRIA KLAGENFURT",
+            "WSG TIROL",
+            "FIRST VIENNA FC",
+            "SKN ST POELTEN",
+            "SV HORN"
+        ],
+        "nationality": "French",
+        "dateOfBirth": "20-12-1998",
+        "position": "Midfielder"
+    },
+    "Messi": {
+        "clubs": [
+            "STURM GRAZ",
+            "FC ADMIRA WACKER",
+            "FLORIDSDORFER AC",
+            "SKU AMSTETTEN",
+            "SV LAFNITZ"
+        ],
+        "nationality": "Argentinian",
+        "dateOfBirth": "24-06-1987",
+        "position": "Forward"
+    }
+}
