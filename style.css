@@ -212,6 +212,6 @@ html, body {
 
 /* Styling for the date of birth wrapper */
 #dateOfBirthWrapper {
-    margin-bottom: 20px; /* Add margin to create space between date of birth and club logos */
+    margin-bottom: 60px; /* Add margin to create space between date of birth and club logos */
 }
 
