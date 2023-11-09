@@ -95445,18 +95445,6 @@
         "dateOfBirth": "11/06/1979",
         "position": "Forward"
     },
-    "Schmidt": {
-        "clubs": [
-            "BORUSSIA DORTMUND",
-            "FORTUNA DUESSELDORF",
-            "HANNOVER 96",
-            "HERTHA BSC",
-            "KARLSRUHER SC"
-        ],
-        "nationality": "Germany",
-        "dateOfBirth": NaN,
-        "position": "Defender"
-    },
     "Scott Allan": {
         "clubs": [
             "BIRMINGHAM CITY",
@@ -108334,19 +108322,6 @@
         "nationality": "England",
         "dateOfBirth": "07/01/1985",
         "position": "Midfielder"
-    },
-    "Weber": {
-        "clubs": [
-            "1 FSV MAINZ 05",
-            "EINTRACHT FRANKFURT",
-            "SC FREIBURG",
-            "VFB STUTTGART",
-            "1 FC KAISERSLAUTERN",
-            "SPVGG GREUTHER FUERTH"
-        ],
-        "nationality": "Germany",
-        "dateOfBirth": NaN,
-        "position": NaN
     },
     "Werner Dreßel": {
         "clubs": [
