@@ -213,5 +213,5 @@ html, body {
 /* Styling for the date of birth */
 #dateOfBirth {
     font-size: 16px;
-    margin-right: 40px; /* Adjust the value as needed */
+    margin: 40px; /* Adjust the value as needed */
 }
