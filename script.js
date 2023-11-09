@@ -21,9 +21,6 @@ function getRandomPlayer() {
         position: playersData[randomPlayerName].position,
         dateOfBirth: playersData[randomPlayerName].dateOfBirth,
     };
-
-    // Ensure proper encoding of the player name
-    selectedPlayer.name = encodeURIComponent(selectedPlayer.name);
 }
 
 function updateLiveGuessCount(count) {
