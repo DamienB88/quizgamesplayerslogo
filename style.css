@@ -209,3 +209,10 @@ html, body {
     font-weight: bold; /* Make the text bold */
     text-align: center; /* Center the text horizontally */
 }
+
+/* Styling for the date of birth */
+#dateOfBirth {
+    font-size: 16px;
+    margin-top: 10px; /* Adjust the value as needed */
+    margin-bottom: 20px; /* Add margin to create space between date of birth and club logos */
+}
