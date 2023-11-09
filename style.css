@@ -214,5 +214,5 @@ html, body {
 #dateOfBirth {
     font-size: 16px;
     margin-top: 10px; /* Adjust the value as needed */
-    margin-bottom: 20px; /* Add margin to create space between date of birth and club logos */
+    margin-bottom: 60px; /* Add margin to create space between date of birth and club logos */
 }
