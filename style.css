@@ -165,7 +165,7 @@ button {
 /* Add margin at the bottom of the disclaimer text */
 #disclaimerText {
     margin-top: 20px; /* Add margin at the top */
-    margin-bottom: 80px; /* Add margin at the bottom */
+    margin-bottom: 25px; /* Add margin at the bottom */
     font-size: 16px;
 }
 
