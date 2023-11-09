@@ -213,5 +213,6 @@ html, body {
 /* Styling for the date of birth */
 #dateOfBirth {
     font-size: 16px;
-    margin: 40px; /* Adjust the value as needed */
+    margin-top: 10px; /* Adjust the value as needed */
+    margin-bottom: 80px; /* Add margin to create space between date of birth and club logos */
 }
