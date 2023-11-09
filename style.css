@@ -49,8 +49,9 @@ button {
 #clubLogos img {
     width: 100px;
     height: auto;
-    margin: 10px;
+    margin: 20px;
     margin-bottom: 20px; /* Adjust the value as needed */
+    margin-top: 20px;
 }
 
 /* Styling for the guess count */
