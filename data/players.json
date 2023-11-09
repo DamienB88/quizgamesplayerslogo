@@ -47,4 +47,20 @@
         "dateOfBirth": "05-02-1941",
         "position": "Midfielder"
     }
+    "Aarón": {
+        "clubs": [
+            "SPORTING BRAGA",
+            "RANGERS FC",
+            "CELTA VIGO",
+            "UD ALMERIA",
+            "VALENCIA CF",
+            "CD ELDENSE",
+            "CD TENERIFE",
+            "ELCHE CF",
+            "REAL OVIEDO"
+        ],
+        "nationality": "Spain",
+        "dateOfBirth": "26/04/1989",
+        "position": "Midfielder"
+    },
  }  
