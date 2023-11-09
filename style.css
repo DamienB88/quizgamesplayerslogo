@@ -210,8 +210,3 @@ html, body {
     text-align: center; /* Center the text horizontally */
 }
 
-/* Styling for the date of birth wrapper */
-#dateOfBirthWrapper {
-    margin-bottom: 60px; /* Add margin to create space between date of birth and club logos */
-}
-
