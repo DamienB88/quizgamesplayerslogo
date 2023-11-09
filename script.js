@@ -19,6 +19,7 @@ function getRandomPlayer() {
         name: randomPlayerName,
         clubs: playersData[randomPlayerName].clubs,
         position: playersData[randomPlayerName].position,
+        dateOfBirth: playersData[randomPlayerName].dateOfBirth,
     };
 }
 
@@ -52,20 +53,26 @@ function loadJSONData() {
 }
 
 function startGame() {
-    const clubAndPositionContainer = document.getElementById('clubAndPosition');
-    clubAndPositionContainer.innerHTML = '';
+    const dateOfBirthAndClubAndPositionContainer = document.getElementById('dateOfBirthAndClubAndPosition');
+    dateOfBirthAndClubAndPositionContainer.innerHTML = '';
 
+    // Display date of birth
+    const dateOfBirthDisplay = document.createElement('div');
+    dateOfBirthDisplay.textContent = `Date of Birth: ${selectedPlayer.dateOfBirth}`;
+    dateOfBirthAndClubAndPositionContainer.appendChild(dateOfBirthDisplay);
+
+    // Display club logos
     selectedPlayer.clubs.forEach((club) => {
         const clubLogoUrl = clubsData[club];
         if (clubLogoUrl) {
             const img = document.createElement('img');
             img.src = clubLogoUrl;
             img.alt = club;
-            clubAndPositionContainer.appendChild(img);
+            dateOfBirthAndClubAndPositionContainer.appendChild(img);
         }
     });
 
-    // Display the position image based on the player's position
+    // Display position image
     if (selectedPlayer.position) {
         const positionImg = document.createElement('img');
         if (selectedPlayer.position === 'Forward') {
@@ -78,7 +85,7 @@ function startGame() {
             positionImg.src = 'data/defender.svg';
         }
         positionImg.alt = selectedPlayer.position;
-        clubAndPositionContainer.appendChild(positionImg);
+        dateOfBirthAndClubAndPositionContainer.appendChild(positionImg);
     }
 
     numberOfGuesses = 0;
