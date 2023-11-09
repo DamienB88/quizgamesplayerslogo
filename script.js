@@ -21,6 +21,9 @@ function getRandomPlayer() {
         position: playersData[randomPlayerName].position,
         dateOfBirth: playersData[randomPlayerName].dateOfBirth,
     };
+
+    // Encode the player name
+    selectedPlayer.encodedName = encodeURIComponent(selectedPlayer.name);
 }
 
 function updateLiveGuessCount(count) {
@@ -63,7 +66,7 @@ function startGame() {
 
     // Display club logos
     selectedPlayer.clubs.forEach((club) => {
-        const clubLogoUrl = clubsData[club];
+        const clubLogoUrl = clubsData[club].replace('{playerName}', selectedPlayer.encodedName);
         if (clubLogoUrl) {
             const img = document.createElement('img');
             img.src = clubLogoUrl;
