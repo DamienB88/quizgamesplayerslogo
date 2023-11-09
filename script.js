@@ -68,7 +68,7 @@ function startGame() {
             const img = document.createElement('img');
             // Encode the player name before appending it to the URL
             const encodedPlayerName = encodeURIComponent(selectedPlayer.name);
-            img.src = clubLogoUrl;
+            img.src = `${clubLogoUrl}?player=${encodedPlayerName}`;
             img.alt = club;
             dateOfBirthAndClubAndPositionContainer.appendChild(img);
         }
