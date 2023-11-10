@@ -106,14 +106,11 @@ function startGame() {
     const giveUpButton = document.getElementById('giveUpButton');
     giveUpButton.disabled = false;
 
-    // Remove the previous "Give up" button click event listener
-    giveUpButton.removeEventListener('click', handleGiveUp);
+    // Remove the click event listener for "New Game" button
+    giveUpButton.removeEventListener('click', startGame);
 
     // Add a new click event listener to the "Give up" button
     giveUpButton.addEventListener('click', handleGiveUp);
-
-    // Reset the "Give up" button text to its original state
-    giveUpButton.textContent = 'Give up';
 }
 
 function handleKeyPress(event) {
