@@ -172,15 +172,31 @@ function handleGiveUp() {
     // Display the correct answer
     displayAnswer();
 
-    // Change "Give up" button text to "New Game"
-    giveUpButton.textContent = 'New Game';
-
     // Remove the click event listener for "Give up" button
     giveUpButton.removeEventListener('click', handleGiveUp);
 
     // Add a new click event listener to "New Game" button
     giveUpButton.addEventListener('click', startGame);
 }
+
+// In the startGame function, update the button text to "New Game"
+function startGame() {
+    // ... (your existing code)
+
+    // Re-enable the "Give up" button
+    const giveUpButton = document.getElementById('giveUpButton');
+    giveUpButton.disabled = false;
+
+    // Update the button text to "New Game"
+    giveUpButton.textContent = 'New Game';
+
+    // Remove the previous "Give up" button click event listener
+    giveUpButton.removeEventListener('click', handleGiveUp);
+
+    // Add a new click event listener to the "New Game" button
+    giveUpButton.addEventListener('click', startGame);
+}
+
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
