@@ -2,11 +2,19 @@ let playersData = {};
 let clubsData = {};
 
 let selectedPlayer = {};
+let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
 
 function getRandomPlayer() {
     const playerNames = Object.keys(playersData);
     let randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
+
+    // Ensure the selected player is not the same as the last one
+    while (randomPlayerName === lastSelectedPlayer.name) {
+        randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
+    }
+
+    lastSelectedPlayer = selectedPlayer;
     selectedPlayer = {
         name: randomPlayerName,
         clubs: playersData[randomPlayerName].clubs,
@@ -36,6 +44,7 @@ function loadJSONData() {
         .then((response) => response.json())
         .then((data) => {
             clubsData = data;
+            getRandomPlayer();
             startGame();
         })
         .catch((error) => {
@@ -97,6 +106,12 @@ function startGame() {
     const giveUpButton = document.getElementById('giveUpButton');
     giveUpButton.disabled = false;
     giveUpButton.textContent = 'Give Up';
+
+    // Remove the previous "Give up" button click event listener
+    giveUpButton.removeEventListener('click', handleGiveUp);
+
+    // Add a new click event listener to the "Give up" button
+    giveUpButton.addEventListener('click', handleGiveUp);
 }
 
 function handleKeyPress(event) {
@@ -117,6 +132,12 @@ function handleKeyPress(event) {
                 // Change "Give Up" button to "New Game"
                 const giveUpButton = document.getElementById('giveUpButton');
                 giveUpButton.textContent = 'New Game';
+
+                // Remove the click event listener from "Give Up" button
+                giveUpButton.removeEventListener('click', handleGiveUp);
+
+                // Add a new click event listener to "New Game" button
+                giveUpButton.addEventListener('click', startGame);
             } else if (numberOfGuesses >= 6) {
                 // Reached the limit of 6 guesses
                 // Display the correct answer
@@ -125,6 +146,12 @@ function handleKeyPress(event) {
                 // Change "Give Up" button to "New Game"
                 const giveUpButton = document.getElementById('giveUpButton');
                 giveUpButton.textContent = 'New Game';
+
+                // Remove the click event listener from "Give Up" button
+                giveUpButton.removeEventListener('click', handleGiveUp);
+
+                // Add a new click event listener to "New Game" button
+                giveUpButton.addEventListener('click', startGame);
             } else {
                 // No guess result text content, but update the live guess count
                 updateLiveGuessCount(numberOfGuesses);
@@ -144,6 +171,12 @@ function handleGiveUp() {
 
     // Change "Give Up" button to "New Game"
     giveUpButton.textContent = 'New Game';
+
+    // Remove the click event listener from "Give Up" button
+    giveUpButton.removeEventListener('click', handleGiveUp);
+
+    // Add a new click event listener to "New Game" button
+    giveUpButton.addEventListener('click', startGame);
 }
 
 const userGuessInput = document.getElementById('userGuess');
@@ -151,6 +184,3 @@ userGuessInput.addEventListener('keypress', handleKeyPress);
 
 // Ensure the game starts when the page loads
 window.addEventListener('load', loadJSONData);
-
-// Add click event listener to "Give Up" button
-document.getElementById('giveUpButton').addEventListener('click', handleGiveUp);
