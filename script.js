@@ -105,9 +105,10 @@ function startGame() {
     // Re-enable the "Give up" button
     const giveUpButton = document.getElementById('giveUpButton');
     giveUpButton.disabled = false;
+    giveUpButton.textContent = 'Give Up';
 
-    // Remove the click event listener for "New Game" button
-    giveUpButton.removeEventListener('click', startGame);
+    // Remove the previous "Give up" button click event listener
+    giveUpButton.removeEventListener('click', handleGiveUp);
 
     // Add a new click event listener to the "Give up" button
     giveUpButton.addEventListener('click', handleGiveUp);
@@ -127,37 +128,34 @@ function handleKeyPress(event) {
                 // Disable the input field
                 document.getElementById('userGuess').disabled = true;
 
-                // Change "Give up" button to "New Game"
+                // Change "Give Up" button to "New Game"
                 const giveUpButton = document.getElementById('giveUpButton');
                 giveUpButton.textContent = 'New Game';
 
-                // Remove the click event listener for "Give up" button
+                // Remove the click event listener from "Give Up" button
                 giveUpButton.removeEventListener('click', handleGiveUp);
 
-                // Add a new click event listener to the "New Game" button
+                // Add a new click event listener to "New Game" button
                 giveUpButton.addEventListener('click', startGame);
             } else {
-                // No guess result text content, but update the live guess count
-                updateLiveGuessCount(numberOfGuesses);
-            }
+                // Check if the limit of 6 guesses is reached
+                if (numberOfGuesses >= 6) {
+                    // Display the correct answer
+                    displayAnswer();
 
-            // Check if the limit of 6 guesses is reached
-            if (numberOfGuesses === 6) {
-                // Disable the input field
-                document.getElementById('userGuess').disabled = true;
+                    // Change "Give Up" button to "New Game"
+                    const giveUpButton = document.getElementById('giveUpButton');
+                    giveUpButton.textContent = 'New Game';
 
-                // Display the correct answer
-                displayAnswer();
+                    // Remove the click event listener from "Give Up" button
+                    giveUpButton.removeEventListener('click', handleGiveUp);
 
-                // Change "Give up" button to "New Game"
-                const giveUpButton = document.getElementById('giveUpButton');
-                giveUpButton.textContent = 'New Game';
-
-                // Remove the click event listener for "Give up" button
-                giveUpButton.removeEventListener('click', handleGiveUp);
-
-                // Add a new click event listener to the "New Game" button
-                giveUpButton.addEventListener('click', startGame);
+                    // Add a new click event listener to "New Game" button
+                    giveUpButton.addEventListener('click', startGame);
+                } else {
+                    // No guess result text content, but update the live guess count
+                    updateLiveGuessCount(numberOfGuesses);
+                }
             }
         }
     }
@@ -172,20 +170,18 @@ function handleGiveUp() {
     // Display the correct answer
     displayAnswer();
 
-    // Change "Give up" button to "New Game"
+    // Change "Give Up" button to "New Game"
     giveUpButton.textContent = 'New Game';
 
-    // Remove the click event listener for "Give up" button
+    // Remove the click event listener from "Give Up" button
     giveUpButton.removeEventListener('click', handleGiveUp);
 
-    // Add a new click event listener to the "New Game" button
+    // Add a new click event listener to "New Game" button
     giveUpButton.addEventListener('click', startGame);
 }
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
 
-// Add this line to the end of the file
-document.getElementById('giveUpButton').addEventListener('click', startGame);
-
-// ... (rest of the code)
+// Ensure the game starts when the page loads
+window.addEventListener('load', loadJSONData);
