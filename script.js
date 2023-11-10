@@ -4,6 +4,7 @@ let clubsData = {};
 let selectedPlayer = {};
 let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
+let maxGuesses = 6; // Set the maximum number of guesses
 
 function getRandomPlayer() {
     const playerNames = Object.keys(playersData);
@@ -22,19 +23,34 @@ function getRandomPlayer() {
         dateOfBirth: playersData[randomPlayerName].dateOfBirth,
     };
 
-    // Encode the player name
-    selectedPlayer.encodedName = encodeURIComponent(selectedPlayer.name);
+    numberOfGuesses = 0; // Reset the number of guesses for a new player
 }
 
 function updateLiveGuessCount(count) {
     const liveGuessCount = document.getElementById('liveGuessCount');
     liveGuessCount.textContent = count;
+
+    // Check if the maximum number of guesses is reached
+    if (count >= maxGuesses) {
+        handleGameOver();
+    }
 }
 
 function displayAnswer() {
     const answerDisplay = document.getElementById('answer');
     answerDisplay.textContent = `The correct answer is: ${selectedPlayer.name}`;
     answerDisplay.style.display = 'block';
+}
+
+function handleGameOver() {
+    const userGuessInput = document.getElementById('userGuess');
+    const giveUpButton = document.getElementById('giveUpButton');
+    
+    userGuessInput.disabled = true;
+    giveUpButton.disabled = true;
+
+    // Display the correct answer
+    displayAnswer();
 }
 
 function loadJSONData() {
@@ -66,7 +82,7 @@ function startGame() {
 
     // Display club logos
     selectedPlayer.clubs.forEach((club) => {
-        const clubLogoUrl = clubsData[club].replace('{playerName}', selectedPlayer.encodedName);
+        const clubLogoUrl = clubsData[club];
         if (clubLogoUrl) {
             const img = document.createElement('img');
             img.src = clubLogoUrl;
@@ -130,11 +146,15 @@ function handleKeyPress(event) {
                 // Disable the input field
                 document.getElementById('userGuess').disabled = true;
 
-                // Start a new game after a correct guess
-                setTimeout(() => {
-                    getRandomPlayer();
-                    startGame();
-                }, 2000); // Delay for 2 seconds before starting a new game
+                // Change "Give up" button text to "New Game"
+                const giveUpButton = document.getElementById('giveUpButton');
+                giveUpButton.textContent = 'New Game';
+
+                // Remove the click event listener for "Give up" button
+                giveUpButton.removeEventListener('click', handleGiveUp);
+
+                // Add a new click event listener to "New Game" button
+                giveUpButton.addEventListener('click', startGame);
             } else {
                 // No guess result text content, but update the live guess count
                 updateLiveGuessCount(numberOfGuesses);
@@ -152,11 +172,14 @@ function handleGiveUp() {
     // Display the correct answer
     displayAnswer();
 
-    // Start a new game after giving up
-    setTimeout(() => {
-        getRandomPlayer();
-        startGame();
-    }, 2000); // Delay for 2 seconds before starting a new game
+    // Change "Give up" button text to "New Game"
+    giveUpButton.textContent = 'New Game';
+
+    // Remove the click event listener for "Give up" button
+    giveUpButton.removeEventListener('click', handleGiveUp);
+
+    // Add a new click event listener to "New Game" button
+    giveUpButton.addEventListener('click', startGame);
 }
 
 const userGuessInput = document.getElementById('userGuess');
