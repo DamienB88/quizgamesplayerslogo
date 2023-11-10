@@ -121,6 +121,7 @@ function handleKeyPress(event) {
             numberOfGuesses++;
 
             if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
+                // Correct guess
                 const answerDisplay = document.getElementById('answer');
                 answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
                 answerDisplay.style.display = 'block';
@@ -137,25 +138,23 @@ function handleKeyPress(event) {
 
                 // Add a new click event listener to "New Game" button
                 giveUpButton.addEventListener('click', startGame);
+            } else if (numberOfGuesses >= 6) {
+                // Reached the limit of 6 guesses
+                // Display the correct answer
+                displayAnswer();
+
+                // Change "Give Up" button to "New Game"
+                const giveUpButton = document.getElementById('giveUpButton');
+                giveUpButton.textContent = 'New Game';
+
+                // Remove the click event listener from "Give Up" button
+                giveUpButton.removeEventListener('click', handleGiveUp);
+
+                // Add a new click event listener to "New Game" button
+                giveUpButton.addEventListener('click', startGame);
             } else {
-                // Check if the limit of 6 guesses is reached
-                if (numberOfGuesses >= 6) {
-                    // Display the correct answer
-                    displayAnswer();
-
-                    // Change "Give Up" button to "New Game"
-                    const giveUpButton = document.getElementById('giveUpButton');
-                    giveUpButton.textContent = 'New Game';
-
-                    // Remove the click event listener from "Give Up" button
-                    giveUpButton.removeEventListener('click', handleGiveUp);
-
-                    // Add a new click event listener to "New Game" button
-                    giveUpButton.addEventListener('click', startGame);
-                } else {
-                    // No guess result text content, but update the live guess count
-                    updateLiveGuessCount(numberOfGuesses);
-                }
+                // No guess result text content, but update the live guess count
+                updateLiveGuessCount(numberOfGuesses);
             }
         }
     }
