@@ -4,6 +4,7 @@ let clubsData = {};
 let selectedPlayer = {};
 let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
+const maxGuesses = 6; // Set the maximum number of guesses
 
 function getRandomPlayer() {
     const playerNames = Object.keys(playersData);
@@ -92,7 +93,7 @@ function startGame() {
     }
 
     numberOfGuesses = 0;
-    updateLiveGuessCount(numberOfGuesses); // Initialize live guess count
+    updateLiveGuessCount(maxGuesses); // Initialize live guess count with max guesses
 
     const guessResult = document.getElementById('guessResult');
     guessResult.textContent = '';
@@ -137,7 +138,13 @@ function handleKeyPress(event) {
                 }, 2000); // Delay for 2 seconds before starting a new game
             } else {
                 // No guess result text content, but update the live guess count
-                updateLiveGuessCount(numberOfGuesses);
+                updateLiveGuessCount(maxGuesses - numberOfGuesses); // Update live guess count with remaining guesses
+
+                // Check if the maximum number of guesses is reached
+                if (numberOfGuesses >= maxGuesses) {
+                    // Display the correct answer
+                    handleGiveUp();
+                }
             }
         }
     }
