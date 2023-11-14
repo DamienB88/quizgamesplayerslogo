@@ -113,7 +113,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #f0f0f0; /* Background color for nationality text */
+    background-color: #faf7f7; /* Background color for nationality text */
     color: #007bff; /* Text color for nationality text */
 }
 
