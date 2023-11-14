@@ -95,7 +95,7 @@ button {
 
 /* Add margin to push the content below the fixed header */
 #container {
-    margin-top: 15px; /* Adjust the margin-top as needed */
+    margin-top: 5px; /* Adjust the margin-top as needed */
 }
 
 /* Style for the "Select a player nationality" text */
