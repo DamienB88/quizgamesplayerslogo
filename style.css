@@ -108,7 +108,7 @@ button {
 .nationalityButton {
     display: inline-block;
     margin: 0 5px; /* Add more space between the flags */
-    padding: 10px;
+    padding: 1px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
