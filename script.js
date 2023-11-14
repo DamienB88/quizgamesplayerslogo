@@ -1,13 +1,16 @@
 let playersData = {};
 let clubsData = {};
-
 let selectedPlayer = {};
 let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
 const maxGuesses = 6; // Set the maximum number of guesses
+let selectedNationality = "all"; // Default nationality selection
 
 function getRandomPlayer() {
-    const playerNames = Object.keys(playersData);
+    const playerNames = Object.keys(playersData).filter(
+        playerName => selectedNationality === "all" || playersData[playerName].nationality === selectedNationality
+    );
+
     let randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
 
     // Ensure the selected player is not the same as the last one
