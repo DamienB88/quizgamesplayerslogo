@@ -73,7 +73,7 @@ button {
     height: 35px; /* Adjust the height as needed */
     width: 100%;
     background-color: #f0f0f0; /* Add a background color if needed */
-    padding: 10px; /* Adjust the padding as needed */
+    padding: 5px; /* Adjust the padding as needed */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a box shadow for a subtle effect */
     display: flex;
     justify-content: space-between;
