@@ -117,24 +117,6 @@ function startGame() {
     giveUpButton.addEventListener('click', handleGiveUp);
 }
 
-function updateNationality(nationality) {
-    selectedNationality = nationality;
-    getRandomPlayer();
-    startGame();
-}
-
-document.querySelectorAll('.nationalityButton').forEach(button => {
-    button.addEventListener('click', () => {
-        updateNationality(button.getAttribute('data-nationality'));
-    });
-});
-
-document.getElementById('moreNationalities').addEventListener('change', function () {
-    if (this.value !== "More") {
-        updateNationality(this.value);
-    }
-});
-
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         if (!document.getElementById('userGuess').disabled) {
