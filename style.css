@@ -212,3 +212,7 @@ html, body {
     text-align: center; /* Center the text horizontally */
 }
 
+/* Add this to your CSS stylesheet */
+.active {
+    text-decoration: underline;
+}
