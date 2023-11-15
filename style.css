@@ -78,6 +78,7 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 5px
     z-index: 999; /* Ensure it's above other content */
 }
 
