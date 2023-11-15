@@ -6,16 +6,15 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     justify-content: center;
+    align-items: center;
     height: 100vh;
 }
 
 /* Styling for the container of club logos */
 #clubLogos {
     margin: 20px;
-    margin-top: 20px;
+    margin-top: 20px
 }
 
 /* Styling for the user guess input field and button */
@@ -25,9 +24,7 @@ input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
-    margin-top: 20px;
-    width: calc(100% - 20px);
-    margin-right: 10px;
+    margin-top: 20px; /* Adjust the value as needed */
 }
 
 button {
@@ -38,6 +35,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-left: 10px;
 }
 
 /* Styling for the guess result message */
@@ -52,7 +50,7 @@ button {
     width: 100px;
     height: auto;
     margin: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Adjust the value as needed */
     margin-top: 20px;
 }
 
@@ -72,34 +70,38 @@ button {
     position: fixed;
     top: 0;
     left: 0;
-    height: 35px;
+    height: 35px; /* Adjust the height as needed */
     width: 100%;
-    background-color: #f0f0f0;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0; /* Add a background color if needed */
+    padding: 10px; /* Adjust the padding as needed */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a box shadow for a subtle effect */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 999;
+    z-index: 999; /* Ensure it's above other content */
 }
 
 /* Style the logo in the header */
 #logo {
-    width: 150px;
-    height: auto;
-    order: 1;
+    width: 150px; /* Adjust the width as needed */
+    height: auto; /* Maintain the aspect ratio */
 }
 
 /* Style the Twitter logo in the header */
 #twitter-link {
-    width: 30px;
-    height: 20px;
-    order: 2;
+    width: 30px; /* Adjust the width as needed */
+    height: 20; /* Maintain the aspect ratio */
 }
 
 /* Add margin to push the content below the fixed header */
 #container {
-    margin-top: 5px;
+    margin-top: 5px; /* Adjust the margin-top as needed */
+}
+
+/* Style for the "Select a player nationality" text */
+#nationalityButtons p {
+    font-weight: bold;
+    margin-bottom: 10px; /* Add more space between the text and flags */
 }
 
 /* Style for nationality buttons (remove blue background) */
