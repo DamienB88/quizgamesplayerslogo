@@ -90,8 +90,10 @@
         <div id="dateOfBirthAndClubAndPosition">
             <!-- Container for club logos and position image, displayed horizontally -->
         </div>
-        <input type="text" id="userGuess" placeholder="Guess the player">
-        <button id="giveUpButton">Give up</button>
+        <div style="display: flex;"> <!-- Use a flex container to keep input and button on the same line -->
+            <input type="text" id="userGuess" placeholder="Guess the player">
+            <button id="giveUpButton">Give up</button>
+        </div>
         <div id="guessCount">GUESSES LEFT: <span id="liveGuessCount" style="color: red;">0</span></div>
         <div id="guessResult"></div>
         <div id="answer" style="display: none;"></div>
