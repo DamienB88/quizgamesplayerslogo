@@ -152,6 +152,9 @@ button {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
+    align-self: center;
+    margin-top: 11px;
+    padding: 10px;
 }
 
 /* Style for the answer display */
