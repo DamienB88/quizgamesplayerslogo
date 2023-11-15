@@ -1,13 +1,16 @@
 let playersData = {};
 let clubsData = {};
-
 let selectedPlayer = {};
 let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
 const maxGuesses = 6; // Set the maximum number of guesses
+let selectedNationality = "all"; // Default nationality selection
 
 function getRandomPlayer() {
-    const playerNames = Object.keys(playersData);
+    const playerNames = Object.keys(playersData).filter(
+        playerName => selectedNationality === "all" || playersData[playerName].nationality === selectedNationality
+    );
+
     let randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
 
     // Ensure the selected player is not the same as the last one
@@ -165,6 +168,24 @@ function handleGiveUp() {
         startGame();
     }, 2000); // Delay for 2 seconds before starting a new game
 }
+
+// Event listeners for nationality buttons
+document.querySelectorAll('.nationalityButton').forEach(button => {
+    button.addEventListener('click', () => {
+        selectedNationality = button.getAttribute('data-nationality');
+        getRandomPlayer();
+        startGame();
+    });
+});
+
+// Event listener for the "More" dropdown
+document.getElementById('moreNationalities').addEventListener('change', function () {
+    if (this.value !== "More") {
+        selectedNationality = this.value;
+        getRandomPlayer();
+        startGame();
+    }
+});
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
