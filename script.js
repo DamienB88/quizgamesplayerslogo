@@ -6,6 +6,29 @@ let numberOfGuesses = 0;
 const maxGuesses = 6; // Set the maximum number of guesses
 let selectedNationality = "all"; // Default nationality selection
 
+// Function to update the active nationality selection
+function updateActiveNationalityButton(selectedNationality) {
+    document.querySelectorAll('.nationalityButton').forEach(button => {
+        if (button.getAttribute('data-nationality') === selectedNationality) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+
+    // Update the active dropdown option
+    const moreNationalitiesDropdown = document.getElementById('moreNationalities');
+    const dropdownOptions = moreNationalitiesDropdown.options;
+    for (let i = 0; i < dropdownOptions.length; i++) {
+        const option = dropdownOptions[i];
+        if (option.value === selectedNationality) {
+            option.classList.add('active');
+        } else {
+            option.classList.remove('active');
+        }
+    }
+}
+
 function getRandomPlayer() {
     const playerNames = Object.keys(playersData).filter(
         playerName => selectedNationality === "all" || playersData[playerName].nationality === selectedNationality
@@ -118,6 +141,9 @@ function startGame() {
 
     // Add a new click event listener to the "Give up" button
     giveUpButton.addEventListener('click', handleGiveUp);
+
+    // Update active nationality button
+    updateActiveNationalityButton(selectedNationality);
 }
 
 function handleKeyPress(event) {
@@ -190,4 +216,7 @@ document.getElementById('moreNationalities').addEventListener('change', function
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
 
-window.addEventListener('load', loadJSONData);
+window.addEventListener('load', () => {
+    loadJSONData();
+    updateActiveNationalityButton(selectedNationality);
+});
