@@ -14,7 +14,7 @@ body {
 /* Styling for the container of club logos */
 #clubLogos {
     margin: 20px;
-    margin-top: 20px
+    margin-top: 20px;
 }
 
 /* Styling for the user guess input field and button */
@@ -78,7 +78,7 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 5px
+    margin-top: 5px;
     z-index: 999; /* Ensure it's above other content */
 }
 
@@ -86,14 +86,14 @@ button {
 #logo {
     width: 150px; /* Adjust the width as needed */
     height: auto; /* Maintain the aspect ratio */
-    margin-top: 5px
+    margin-top: 5px;
 }
 
 /* Style the Twitter logo in the header */
 #twitter-link {
     width: 30px; /* Adjust the width as needed */
-    height: 20; /* Maintain the aspect ratio */
-    margin-top: 5px
+    height: 20px; /* Maintain the aspect ratio */
+    margin-top: 5px;
 }
 
 /* Add margin to push the content below the fixed header */
