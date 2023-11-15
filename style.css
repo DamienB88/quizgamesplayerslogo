@@ -153,6 +153,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
+    height: 48px; /* Match the height of the input */
 }
 
 /* Style for the answer display */
