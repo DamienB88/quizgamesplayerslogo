@@ -145,7 +145,7 @@ button {
 
 /* Style for the "Give up" button */
 #giveUpButton {
-    padding: 10px 10px;
+    padding: 5px 20px;
     font-size: 16px;
     background-color: #ff0000; /* Red background for the "Give up" button */
     color: #fff;
