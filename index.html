@@ -1,60 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #twitter-link img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px; /* Adjust as needed */
+        }
+
         .active {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div id="header">
+    <header>
         <img src="images/footballgridogo.png" alt="Your Logo" id="logo">
         <a href="https://twitter.com/Football_Grid_" id="twitter-link" target="_blank">
             <img src="images/twitter.svg" alt="Twitter Logo">
         </a>
-    </div>
+    </header>
+
     <div id="container">
         <!-- New nationality buttons -->
-        <div id="nationalityButtons">
-            <p>Select a player nationality:</p>
-            <button class= "nationalityButton" data-nationality="all">🏆 Hardcore</button>
-            <button class= "nationalityButton" data-nationality="English">🇬🇧 English</button>
-            <button class= "nationalityButton" data-nationality="French">🇫🇷 French</button>
-            <button class= "nationalityButton" data-nationality="German">🇩🇪 German</button>
-            <button class= "nationalityButton" data-nationality="Spanish">🇪🇸 Spanish</button>
-            <button class= "nationalityButton" data-nationality="Italian">🇮🇹 Italian</button>
-            
-            <!-- "More" selector dropdown initially hidden -->
-            <select id="moreNationalities" class="more-dropdown">
-                <option value="More">More</option>
-                <option value="Scottish">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish</option>
-                <option value="Swedish">🇸🇪 Swedish</option>
-                <option value="Danish">🇩🇰 Danish</option>
-                <option value="Austrian">🇦🇹 Austrian</option>
-                <option value="Swiss">🇨🇭 Swiss</option>
-                <option value="Belgian">🇧🇪 Belgian</option>
-                <option value="Brazilian">🇧🇷 Brazilian</option>
-                <option value="Dutch">🇳🇱 Dutch</option>
-            </select>
-        </div>
-        <!-- End of new nationality buttons -->
-        <!-- After the nationality buttons -->
-        <div id="disclaimerText">
-            <p>Club coverage per player might not be exhaustive and may not include teams from third-tier or lower divisions or outside Europe.</p>
-        </div>
-        <div id="dateOfBirthAndClubAndPosition">
-            <!-- Container for club logos and position image, displayed horizontally -->
-        </div>
-        <input type="text" id="userGuess" placeholder="Guess the player">
-        <button id="giveUpButton">Give up</button>
-        <div id="guessCount">GUESSES LEFT: <span id="liveGuessCount" style="color: red;">0</span></div>
-        <div id="guessResult"></div>
-        <div id="answer" style="display: none;"></div>
+        <!-- ... (rest of your HTML) ... -->
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
