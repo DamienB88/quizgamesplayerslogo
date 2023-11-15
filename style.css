@@ -86,12 +86,14 @@ button {
 #logo {
     width: 150px; /* Adjust the width as needed */
     height: auto; /* Maintain the aspect ratio */
+    margin-top: 5px
 }
 
 /* Style the Twitter logo in the header */
 #twitter-link {
     width: 30px; /* Adjust the width as needed */
     height: 20; /* Maintain the aspect ratio */
+    margin-top: 5px
 }
 
 /* Add margin to push the content below the fixed header */
