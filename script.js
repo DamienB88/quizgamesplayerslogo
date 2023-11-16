@@ -35,6 +35,29 @@ function updateActiveNationalityButton(selectedNationality) {
   }
 }
 
+function openEndgameModal(answerCorrect, outOfGuesses) {
+  // Create a new Vue instance for the EndgameModal component
+  const endgameModalInstance = new Vue({
+    render: (h) => h(EndgameModal, {
+      props: {
+        statsOpened: true,
+        finished: true,
+        answerCorrect,
+        outOfGuesses,
+        selectedPlayer,
+      },
+      on: {
+        'close-modal': () => {
+          endgameModalInstance.$destroy(); // Destroy the Vue instance to clean up
+        },
+      },
+    }),
+  }).$mount();
+
+  // Append the modal to the body
+  document.body.appendChild(endgameModalInstance.$el);
+}
+
 function getRandomPlayer() {
   const playerNames = Object.keys(playersData).filter(
     playerName => selectedNationality === "all" || playersData[playerName].nationality === selectedNationality
@@ -70,30 +93,9 @@ function displayAnswer() {
     render: (h) => h(EndgameModal, {
       props: {
         statsOpened: true,
-        finished: false,
-        answerCorrect: true, // Modify this based on the actual answer correctness
-        selectedPlayer,
-      },
-      on: {
-        'close-modal': () => {
-          endgameModalInstance.$destroy(); // Destroy the Vue instance to clean up
-        },
-      },
-    }),
-  }).$mount();
-
-  // Append the modal to the body
-  document.body.appendChild(endgameModalInstance.$el);
-}
-
-function openEndgameModal(answerCorrect) {
-  // Create a new Vue instance for the EndgameModal component
-  const endgameModalInstance = new Vue({
-    render: (h) => h(EndgameModal, {
-      props: {
-        statsOpened: true,
-        finished: false,
-        answerCorrect,
+        finished: true,
+        answerCorrect: false, // Modify this based on the actual answer correctness
+        outOfGuesses: false, // Modify this based on the actual scenario
         selectedPlayer,
       },
       on: {
@@ -210,7 +212,7 @@ function handleKeyPress(event) {
 
       if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
         // Display the correct answer in the modal
-        openEndgameModal(true);
+        openEndgameModal(true, false);
       } else {
         // Wrong guess logic
         handleWrongGuess();
@@ -221,7 +223,7 @@ function handleKeyPress(event) {
         // Check if the maximum number of guesses is reached
         if (numberOfGuesses >= maxGuesses) {
           // Display the correct answer in the modal
-          openEndgameModal(false);
+          openEndgameModal(false, true);
         }
       }
     }
@@ -235,7 +237,7 @@ function handleGiveUp() {
   giveUpButton.disabled = true;
 
   // Display the correct answer in the modal
-  openEndgameModal(false);
+  openEndgameModal(false, true);
 
   // Start a new game after giving up
   setTimeout(() => {
