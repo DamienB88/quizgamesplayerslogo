@@ -221,3 +221,9 @@ html, body {
 .active {
     text-decoration: underline;
 }
+
+/* Search bar - wrong guess effects */
+.wrong-guess {
+    background-color: #f00505; /* Adjust the color as needed */
+    transition: background-color 1s ease; /* Adjust the duration as needed */
+}
