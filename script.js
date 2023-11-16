@@ -146,6 +146,18 @@ function startGame() {
     updateActiveNationalityButton(selectedNationality);
 }
 
+function handleWrongGuess() {
+    const userGuessInput = document.getElementById('userGuess');
+
+    // Add the wrong-guess class to the input field
+    userGuessInput.classList.add('wrong-guess');
+
+    // Remove the class after a short delay (1 second)
+    setTimeout(function() {
+        userGuessInput.classList.remove('wrong-guess');
+    }, 1000); // Adjust the delay as needed
+}
+
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         if (!document.getElementById('userGuess').disabled) {
@@ -166,6 +178,9 @@ function handleKeyPress(event) {
                     startGame();
                 }, 2000); // Delay for 2 seconds before starting a new game
             } else {
+                // Wrong guess logic
+                handleWrongGuess();
+
                 // No guess result text content, but update the live guess count
                 updateLiveGuessCount(maxGuesses - numberOfGuesses); // Update live guess count with remaining guesses
 
