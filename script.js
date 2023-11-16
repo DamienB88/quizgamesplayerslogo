@@ -3,18 +3,28 @@ let clubsData = {};
 let selectedPlayer = {};
 let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
-const maxGuesses = 6; // Set the maximum number of guesses
-let selectedNationality = "all"; // Default nationality selection
+const maxGuesses = 6;
+let selectedNationality = "all";
 
 function updateActiveNationalityButton(selectedNationality) {
   document.querySelectorAll('.nationalityButton').forEach(button => {
-    button.classList.toggle('active', button.getAttribute('data-nationality') === selectedNationality);
+    if (button.getAttribute('data-nationality') === selectedNationality) {
+      button.classList.add('active');
+    } else {
+      button.classList.remove('active');
+    }
   });
 
   const moreNationalitiesDropdown = document.getElementById('moreNationalities');
-  Array.from(moreNationalitiesDropdown.options).forEach(option => {
-    option.classList.toggle('active', option.value === selectedNationality);
-  });
+  const dropdownOptions = moreNationalitiesDropdown.options;
+  for (let i = 0; i < dropdownOptions.length; i++) {
+    const option = dropdownOptions[i];
+    if (option.value === selectedNationality) {
+      option.classList.add('active');
+    } else {
+      option.classList.remove('active');
+    }
+  }
 }
 
 function getRandomPlayer() {
@@ -40,14 +50,14 @@ function getRandomPlayer() {
 }
 
 function updateLiveGuessCount(count) {
-  document.getElementById('liveGuessCount').textContent = count;
+  const liveGuessCount = document.getElementById('liveGuessCount');
+  liveGuessCount.textContent = count;
 }
 
-function displayAnswer(message) {
-  const answerPopup = document.getElementById('answerPopup');
-  const answerPopupText = document.getElementById('answerPopupText');
-  answerPopupText.textContent = message;
-  answerPopup.style.display = 'block';
+function displayAnswer() {
+  const answerDisplay = document.getElementById('answerPopupText');
+  answerDisplay.textContent = `The correct answer is: ${selectedPlayer.name}`;
+  document.getElementById('answerPopup').style.display = 'block';
 }
 
 function closeAnswerPopup() {
@@ -56,18 +66,18 @@ function closeAnswerPopup() {
 
 function loadJSONData() {
   fetch('data/players.json')
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       playersData = data;
       return fetch('data/clubs.json');
     })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       clubsData = data;
       getRandomPlayer();
       startGame();
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Error loading JSON data:', error);
     });
 }
@@ -80,7 +90,7 @@ function startGame() {
   dateOfBirthDisplay.textContent = `Date of Birth: ${selectedPlayer.dateOfBirth}`;
   dateOfBirthAndClubAndPositionContainer.appendChild(dateOfBirthDisplay);
 
-  selectedPlayer.clubs.forEach(club => {
+  selectedPlayer.clubs.forEach((club) => {
     const clubLogoUrl = clubsData[club].replace('{playerName}', selectedPlayer.encodedName);
     if (clubLogoUrl) {
       const img = document.createElement('img');
@@ -106,12 +116,12 @@ function startGame() {
   const userGuessInput = document.getElementById('userGuess');
   userGuessInput.disabled = false;
   userGuessInput.value = '';
-
-  const answerDisplay = document.getElementById('answer');
+  const answerDisplay = document.getElementById('answerPopup');
   answerDisplay.style.display = 'none';
 
   const giveUpButton = document.getElementById('giveUpButton');
   giveUpButton.disabled = false;
+
   giveUpButton.removeEventListener('click', handleGiveUp);
   giveUpButton.addEventListener('click', handleGiveUp);
 
@@ -121,7 +131,8 @@ function startGame() {
 function handleWrongGuess() {
   const userGuessInput = document.getElementById('userGuess');
   userGuessInput.classList.add('wrong-guess');
-  setTimeout(() => {
+
+  setTimeout(function () {
     userGuessInput.classList.remove('wrong-guess');
   }, 1000);
 }
@@ -133,8 +144,12 @@ function handleKeyPress(event) {
       numberOfGuesses++;
 
       if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
-        displayAnswer(`Correct! You guessed it in ${numberOfGuesses} guesses.`);
+        const answerDisplay = document.getElementById('answerPopupText');
+        answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
+        document.getElementById('answerPopup').style.display = 'block';
+
         document.getElementById('userGuess').disabled = true;
+
         setTimeout(() => {
           getRandomPlayer();
           startGame();
@@ -144,7 +159,7 @@ function handleKeyPress(event) {
         updateLiveGuessCount(maxGuesses - numberOfGuesses);
 
         if (numberOfGuesses >= maxGuesses) {
-          displayAnswer(`Sorry, you've run out of guesses. The correct answer is ${selectedPlayer.name}.`);
+          handleGiveUp();
         }
       }
     }
@@ -156,7 +171,9 @@ function handleGiveUp() {
   userGuessInput.disabled = true;
   const giveUpButton = document.getElementById('giveUpButton');
   giveUpButton.disabled = true;
-  displayAnswer(`The correct answer is ${selectedPlayer.name}.`);
+
+  displayAnswer();
+
   setTimeout(() => {
     getRandomPlayer();
     startGame();
