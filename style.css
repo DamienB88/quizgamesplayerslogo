@@ -18,16 +18,23 @@ body {
 }
 
 /* Styling for the user guess input field and button */
-input[type="text"] {
-    padding: 10px;
+.flex-container {
+    display: flex;
+    width: 300px; /* Adjust the width as needed */
+}
+
+#userGuess {
+    flex: 1;
+    padding: 10px 30px 10px 10px; /* Adjust padding as needed */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
-    margin-top: 20px; /* Adjust the value as needed */
+    background-image: url('search-icon.png'); /* Replace 'search-icon.png' with the path to your search icon image */
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
-button {
+#giveUpButton {
     padding: 5px;
     font-size: 16px;
     background-color: #007bff;
@@ -118,6 +125,8 @@ button {
     cursor: pointer;
     background-color: #faf7f7; /* Background color for nationality text */
     color: #007bff; /* Text color for nationality text */
+    margin-right: 1px; /* Adjust the value as needed for the desired spacing */
+    margin-left: 1px; /* Adjust the value as needed for the desired spacing */
 }
 
 /* Apply margin-right to create space between nationality buttons */
@@ -206,55 +215,4 @@ html, body {
 
 /* Apply styling to the position element */
 #position {
-    width: 100px; /* Adjust the width as needed */
-    height: auto;
-    margin: 10px;
-    margin-bottom: 20px; /* Adjust the value as needed */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold; /* Make the text bold */
-    text-align: center; /* Center the text horizontally */
-}
-
-/* Add this to your CSS stylesheet */
-.active {
-    text-decoration: underline;
-}
-
-/* Search bar - wrong guess effects */
-.wrong-guess {
-    background-color: #f00505; /* Adjust the color as needed */
-    transition: background-color 1s ease; /* Adjust the duration as needed */
-}
-
-/* Your existing styles here */
-
-/* Style for the answer pop-up */
-#answerPopup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: #fff;
-    border: 2px solid #333;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-}
-
-#answerPopup h2 {
-    color: #333;
-}
-
-#answerPopup button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    width: 
