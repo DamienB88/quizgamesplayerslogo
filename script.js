@@ -96,10 +96,11 @@ function startGame() {
       const img = document.createElement('img');
       img.src = clubLogoUrl;
       img.alt = club;
-      img.addEventListener('click', () => displayClubName(img.alt));
+      img.addEventListener('click', () => displayClubName(club));
       dateOfBirthAndClubAndPositionContainer.appendChild(img);
     }
   });
+}
 
   if (selectedPlayer.position) {
     const positionImg = document.createElement('img');
@@ -197,21 +198,8 @@ document.getElementById('moreNationalities').addEventListener('change', function
   }
 });
 
-function displayClubName(event, clubName) {
-  const tooltip = document.createElement('div');
-  tooltip.className = 'tooltip';
-  tooltip.textContent = clubName;
-
-  // Position the tooltip next to the clicked logo
-  tooltip.style.left = `${event.clientX}px`;
-  tooltip.style.top = `${event.clientY}px`;
-
-  document.body.appendChild(tooltip);
-
-  // Remove the tooltip after a short delay
-  setTimeout(() => {
-    document.body.removeChild(tooltip);
-  }, 2000);
+function displayClubName(clubName) {
+  alert(`Club Name: ${clubName}`);
 }
 
 const userGuessInput = document.getElementById('userGuess');
