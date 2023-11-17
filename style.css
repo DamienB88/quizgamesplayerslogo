@@ -228,61 +228,12 @@ html, body {
     transition: background-color 1s ease; /* Adjust the duration as needed */
 }
 
-/* Style for the answer pop-up */
-#answerPopup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: #3498db; /* Modern blue color, you can adjust as needed */
-    border: 2px solid #2980b9; /* Darker blue border */
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    color: #fff; /* Text color */
-}
-
-#answerPopup h2 {
-    color: #fff;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-#answerPopup p {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-#closeButton {
-    background-color: #e74c3c; /* Red color for close button */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-#twitterButton {
-    background-color: #1da1f2; /* Twitter blue color */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-#shareButton {
-    background-color: #2ecc71; /* Green color for share button */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
+/* Add this to your CSS stylesheet for the toolpit */
+.tooltip {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 9999;
 }
