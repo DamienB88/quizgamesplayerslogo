@@ -197,14 +197,21 @@ document.getElementById('moreNationalities').addEventListener('change', function
   }
 });
 
-function displayClubName(clubName) {
-  const clubFullName = Object.keys(clubsData).find(key => key.toUpperCase() === clubName.toUpperCase());
+function displayClubName(event, clubName) {
+  const tooltip = document.createElement('div');
+  tooltip.className = 'tooltip';
+  tooltip.textContent = clubName;
 
-  if (clubFullName) {
-    alert(`Club Name: ${clubFullName}`);
-  } else {
-    console.error(`Club name not found for ${clubName}`);
-  }
+  // Position the tooltip next to the clicked logo
+  tooltip.style.left = `${event.clientX}px`;
+  tooltip.style.top = `${event.clientY}px`;
+
+  document.body.appendChild(tooltip);
+
+  // Remove the tooltip after a short delay
+  setTimeout(() => {
+    document.body.removeChild(tooltip);
+  }, 2000);
 }
 
 const userGuessInput = document.getElementById('userGuess');
