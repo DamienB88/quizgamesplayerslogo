@@ -96,11 +96,9 @@ function startGame() {
       const img = document.createElement('img');
       img.src = clubLogoUrl;
       img.alt = club;
-      img.addEventListener('click', () => displayClubName(club));
       dateOfBirthAndClubAndPositionContainer.appendChild(img);
     }
   });
-}
 
   if (selectedPlayer.position) {
     const positionImg = document.createElement('img');
@@ -197,10 +195,6 @@ document.getElementById('moreNationalities').addEventListener('change', function
     startGame();
   }
 });
-
-function displayClubName(clubName) {
-  alert(`Club Name: ${clubName}`);
-}
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
