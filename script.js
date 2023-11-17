@@ -177,7 +177,7 @@ function handleGiveUp() {
   setTimeout(() => {
     getRandomPlayer();
     startGame();
-  }, 2000);
+  }, 4000);
 }
 
 document.querySelectorAll('.nationalityButton').forEach(button => {
