@@ -64,51 +64,68 @@ function closeAnswerPopup() {
   document.getElementById('answerPopup').style.display = 'none';
 }
 
-function showStatsModal() {
-  // Update stats from local storage
-  const stats = JSON.parse(localStorage.getItem('stats'));
-  if (stats) {
-    document.getElementById('games-played').textContent = stats.gamesPlayed;
-    document.getElementById('win-percentage').textContent = stats.winPercentage;
-    document.getElementById('average-guesses').textContent = stats.averageGuesses;
-    document.getElementById('max-streak').textContent = stats.maxStreak;
-    document.getElementById('current-streak').textContent = stats.currentStreak;
-  }
-
-  statsModal.style.display = 'block';
-}
-
-function handleGameOver(correctGuess) {
-  const userGuessInput = document.getElementById('userGuess');
-  userGuessInput.disabled = true;
-  const giveUpButton = document.getElementById('giveUpButton');
-  giveUpButton.disabled = true;
-
-  if (correctGuess) {
-    // Player guessed correctly
-    showStatsModal();
-  } else {
-    // Player gave up
-    displayAnswer();
-
-    setTimeout(() => {
+function loadJSONData() {
+  fetch('data/players.json')
+    .then((response) => response.json())
+    .then((data) => {
+      playersData = data;
+      return fetch('data/clubs.json');
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      clubsData = data;
       getRandomPlayer();
       startGame();
-    }, 4000);
-  }
+    })
+    .catch((error) => {
+      console.error('Error loading JSON data:', error);
+    });
 }
 
-function handleCorrectGuess() {
-  const answerDisplay = document.getElementById('answerPopupText');
-  answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
-  showStatsModal();
+function startGame() {
+  const dateOfBirthAndClubAndPositionContainer = document.getElementById('dateOfBirthAndClubAndPosition');
+  dateOfBirthAndClubAndPositionContainer.innerHTML = '';
 
-  document.getElementById('userGuess').disabled = true;
+  const dateOfBirthDisplay = document.createElement('div');
+  dateOfBirthDisplay.textContent = `Date of Birth: ${selectedPlayer.dateOfBirth}`;
+  dateOfBirthAndClubAndPositionContainer.appendChild(dateOfBirthDisplay);
 
-  setTimeout(() => {
-    getRandomPlayer();
-    startGame();
-  }, 2000);
+  selectedPlayer.clubs.forEach((club) => {
+    const clubLogoUrl = clubsData[club].replace('{playerName}', selectedPlayer.encodedName);
+    if (clubLogoUrl) {
+      const img = document.createElement('img');
+      img.src = clubLogoUrl;
+      img.alt = club;
+      dateOfBirthAndClubAndPositionContainer.appendChild(img);
+    }
+  });
+
+  if (selectedPlayer.position) {
+    const positionImg = document.createElement('img');
+    positionImg.src = `data/${selectedPlayer.position.toLowerCase()}.svg`;
+    positionImg.alt = selectedPlayer.position;
+    dateOfBirthAndClubAndPositionContainer.appendChild(positionImg);
+  }
+
+  numberOfGuesses = 0;
+  updateLiveGuessCount(maxGuesses);
+
+  const guessResult = document.getElementById('guessResult');
+  guessResult.textContent = '';
+
+  const userGuessInput = document.getElementById('userGuess');
+  userGuessInput.disabled = false;
+  userGuessInput.value = '';
+  const answerDisplay = document.getElementById('answerPopup');
+  answerDisplay.style.display = 'none';
+
+  const giveUpButton = document.getElementById('giveUpButton');
+  giveUpButton.disabled = false;
+
+  giveUpButton.removeEventListener('click', handleGiveUp);
+  giveUpButton.addEventListener('click', handleGiveUp);
+
+  updateActiveNationalityButton(selectedNationality);
 }
 
 function handleWrongGuess() {
@@ -127,7 +144,16 @@ function handleKeyPress(event) {
       numberOfGuesses++;
 
       if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
-        handleCorrectGuess();
+        const answerDisplay = document.getElementById('answerPopupText');
+        answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
+        document.getElementById('answerPopup').style.display = 'block';
+
+        document.getElementById('userGuess').disabled = true;
+
+        setTimeout(() => {
+          getRandomPlayer();
+          startGame();
+        }, 2000);
       } else {
         handleWrongGuess();
         updateLiveGuessCount(maxGuesses - numberOfGuesses);
