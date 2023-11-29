@@ -83,6 +83,28 @@
         .close:hover {
           color: #f00;
         }
+
+        /* Styles for stat boxes */
+.stat-box {
+  background-color: #2c2c2c; /* Background color for stat boxes */
+  padding: 10px;
+  text-align: center;
+  margin: 10px;
+}
+
+.stat-value {
+  /* Set the size, boldness, and color for stat values */
+  font-size: 18px; /* Adjust as needed */
+  font-weight: bold;
+  color: #fff; /* White color for stat values */
+}
+
+.stat-text {
+  /* Set the size, boldness, and color for stat texts */
+  font-size: 14px; /* Adjust as needed */
+  font-weight: bold;
+  color: #ccc; /* Light gray color for stat texts */
+}
     </style>
 </head>
 <body>
@@ -143,27 +165,27 @@
     <div id="stats-modal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeStatsModal()">&times;</span>
-        <h2 style="text-align: center;">Stats</h2>
+        <h2 style="text-align: center; color: #fff;">Stats</h2>
         <div style="display: flex; justify-content: space-around;">
           <div class="stat-box">
-            <p style="text-align: center;">Games Played:</p>
-            <span id="games-played" class="stat-value"></span>
+            <span id="games-played" class="stat-value">6</span>
+            <p class="stat-text">Games Played</p>
           </div>
           <div class="stat-box">
-            <p style="text-align: center;">Win Percentage:</p>
-            <span id="win-percentage" class="stat-value"></span>
+            <span id="win-percentage" class="stat-value">75%</span>
+            <p class="stat-text">Win Percentage</p>
           </div>
           <div class="stat-box">
-            <p style="text-align: center;">Average Guesses:</p>
-            <span id="average-guesses" class="stat-value"></span>
+            <span id="average-guesses" class="stat-value">4</span>
+            <p class="stat-text">Average Guesses</p>
           </div>
           <div class="stat-box">
-            <p style="text-align: center;">Max Streak:</p>
-            <span id="max-streak" class="stat-value"></span>
+            <span id="max-streak" class="stat-value">3</span>
+            <p class="stat-text">Max Streak</p>
           </div>
           <div class="stat-box">
-            <p style="text-align: center;">Current Streak:</p>
-            <span id="current-streak" class="stat-value"></span>
+            <span id="current-streak" class="stat-value">1</span>
+            <p class="stat-text">Current Streak</p>
           </div>
         </div>
       </div>
