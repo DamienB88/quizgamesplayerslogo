@@ -63,7 +63,7 @@
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: #1a1a1a; /* Darker background color */
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
@@ -77,7 +77,7 @@
   top: 10px;
   right: 10px;
   font-size: 20px;
-  color: #000;
+  color: #fff; /* White color for the close button */
 }
 
         .close:hover {
@@ -143,12 +143,29 @@
     <div id="stats-modal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeStatsModal()">&times;</span>
-        <h2>Stats</h2>
-        <p>Games Played: <span id="games-played"></span></p>
-        <p>Win Percentage: <span id="win-percentage"></span></p>
-        <p>Average Guesses: <span id="average-guesses"></span></p>
-        <p>Max Streak: <span id="max-streak"></span></p>
-        <p>Current Streak: <span id="current-streak"></span></p>
+        <h2 style="text-align: center;">Stats</h2>
+        <div style="display: flex; justify-content: space-around;">
+          <div class="stat-box">
+            <p style="text-align: center;">Games Played:</p>
+            <span id="games-played" class="stat-value"></span>
+          </div>
+          <div class="stat-box">
+            <p style="text-align: center;">Win Percentage:</p>
+            <span id="win-percentage" class="stat-value"></span>
+          </div>
+          <div class="stat-box">
+            <p style="text-align: center;">Average Guesses:</p>
+            <span id="average-guesses" class="stat-value"></span>
+          </div>
+          <div class="stat-box">
+            <p style="text-align: center;">Max Streak:</p>
+            <span id="max-streak" class="stat-value"></span>
+          </div>
+          <div class="stat-box">
+            <p style="text-align: center;">Current Streak:</p>
+            <span id="current-streak" class="stat-value"></span>
+          </div>
+        </div>
       </div>
     </div>
 
