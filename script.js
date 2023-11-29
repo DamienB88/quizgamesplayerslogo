@@ -3,6 +3,10 @@ let clubsData = {};
 let selectedPlayer = {};
 let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
+let gamesPlayed = 0;
+let correctGuesses = 0;
+let currentStreak = 0;
+let maxStreak = 0;
 const maxGuesses = 6;
 let selectedNationality = "all";
 
@@ -58,10 +62,43 @@ function displayAnswer() {
   const answerDisplay = document.getElementById('answerPopupText');
   answerDisplay.textContent = `The correct answer is: ${selectedPlayer.name}`;
   document.getElementById('answerPopup').style.display = 'block';
+
+  // Display stats modal after a delay
+  setTimeout(() => {
+    displayStatsModal();
+  }, 2000); // Adjust the delay as needed
+}
+
+function displayStatsModal() {
+  // Update and display the stats in the modal
+  const gamesPlayedSpan = document.getElementById('games-played');
+  gamesPlayedSpan.textContent = gamesPlayed;
+
+  const winPercentageSpan = document.getElementById('win-percentage');
+  const winPercentage = gamesPlayed === 0 ? 0 : ((correctGuesses / gamesPlayed) * 100).toFixed(2);
+  winPercentageSpan.textContent = `${winPercentage}%`;
+
+  const averageGuessesSpan = document.getElementById('average-guesses');
+  const averageGuesses = gamesPlayed === 0 ? 0 : (numberOfGuesses / gamesPlayed).toFixed(2);
+  averageGuessesSpan.textContent = averageGuesses;
+
+  const maxStreakSpan = document.getElementById('max-streak');
+  maxStreakSpan.textContent = maxStreak;
+
+  const currentStreakSpan = document.getElementById('current-streak');
+  currentStreakSpan.textContent = currentStreak;
+
+  // Show the stats modal
+  const statsModal = document.getElementById('stats-modal');
+  statsModal.style.display = 'block';
 }
 
 function closeAnswerPopup() {
   document.getElementById('answerPopup').style.display = 'none';
+}
+
+function closeStatsModal() {
+  document.getElementById('stats-modal').style.display = 'none';
 }
 
 function loadJSONData() {
@@ -144,6 +181,14 @@ function handleKeyPress(event) {
       numberOfGuesses++;
 
       if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
+        // Update stats for correct guess
+        gamesPlayed++;
+        correctGuesses++;
+        currentStreak++;
+        if (currentStreak > maxStreak) {
+          maxStreak = currentStreak;
+        }
+
         const answerDisplay = document.getElementById('answerPopupText');
         answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
         document.getElementById('answerPopup').style.display = 'block';
@@ -155,6 +200,8 @@ function handleKeyPress(event) {
           startGame();
         }, 2000);
       } else {
+        // Update stats for wrong guess
+        currentStreak = 0;
         handleWrongGuess();
         updateLiveGuessCount(maxGuesses - numberOfGuesses);
 
@@ -172,12 +219,16 @@ function handleGiveUp() {
   const giveUpButton = document.getElementById('giveUpButton');
   giveUpButton.disabled = true;
 
+  // Update stats for giving up
+  gamesPlayed++;
+  currentStreak = 0;
+
   displayAnswer();
 
+  // Display stats modal after a delay
   setTimeout(() => {
-    getRandomPlayer();
-    startGame();
-  }, 4000);
+    displayStatsModal();
+  }, 4000); // Adjust the delay as needed
 }
 
 document.querySelectorAll('.nationalityButton').forEach(button => {
@@ -198,6 +249,10 @@ document.getElementById('moreNationalities').addEventListener('change', function
 
 const userGuessInput = document.getElementById('userGuess');
 userGuessInput.addEventListener('keypress', handleKeyPress);
+
+document.getElementById('show-stats-modal').addEventListener('click', () => {
+  displayStatsModal();
+});
 
 window.addEventListener('load', () => {
   loadJSONData();
