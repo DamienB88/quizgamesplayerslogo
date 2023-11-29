@@ -3,10 +3,10 @@ let clubsData = {};
 let selectedPlayer = {};
 let lastSelectedPlayer = {};
 let numberOfGuesses = 0;
-let gamesPlayed = 0;
-let correctGuesses = 0;
-let currentStreak = 0;
-let maxStreak = 0;
+let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
+let correctGuesses = parseInt(localStorage.getItem('correctGuesses')) || 0;
+let currentStreak = parseInt(localStorage.getItem('currentStreak')) || 0;
+let maxStreak = parseInt(localStorage.getItem('maxStreak')) || 0;
 const maxGuesses = 6;
 let selectedNationality = "all";
 
@@ -195,6 +195,9 @@ function handleKeyPress(event) {
 
         document.getElementById('userGuess').disabled = true;
 
+        // Update local storage for stats
+        updateLocalStorage();
+
         setTimeout(() => {
           getRandomPlayer();
           startGame();
@@ -225,10 +228,20 @@ function handleGiveUp() {
 
   displayAnswer();
 
+  // Update local storage for stats
+  updateLocalStorage();
+
   // Display stats modal after a delay
   setTimeout(() => {
     displayStatsModal();
   }, 4000); // Adjust the delay as needed
+}
+
+function updateLocalStorage() {
+  localStorage.setItem('gamesPlayed', gamesPlayed.toString());
+  localStorage.setItem('correctGuesses', correctGuesses.toString());
+  localStorage.setItem('currentStreak', currentStreak.toString());
+  localStorage.setItem('maxStreak', maxStreak.toString());
 }
 
 document.querySelectorAll('.nationalityButton').forEach(button => {
