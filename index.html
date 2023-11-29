@@ -1,151 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+let playersData = {};
+let clubsData = {};
+let selectedPlayer = {};
+let lastSelectedPlayer = {};
+let numberOfGuesses = 0;
+const maxGuesses = 6;
+let selectedNationality = "all";
+
+function updateActiveNationalityButton(selectedNationality) {
+  document.querySelectorAll('.nationalityButton').forEach(button => {
+    if (button.getAttribute('data-nationality') === selectedNationality) {
+      button.classList.add('active');
+    } else {
+      button.classList.remove('active');
+    }
+  });
+
+  const moreNationalitiesDropdown = document.getElementById('moreNationalities');
+  const dropdownOptions = moreNationalitiesDropdown.options;
+  for (let i = 0; i < dropdownOptions.length; i++) {
+    const option = dropdownOptions[i];
+    if (option.value === selectedNationality) {
+      option.classList.add('active');
+    } else {
+      option.classList.remove('active');
+    }
+  }
+}
+
+function getRandomPlayer() {
+  const playerNames = Object.keys(playersData).filter(
+    playerName => selectedNationality === "all" || playersData[playerName].nationality === selectedNationality
+  );
+
+  let randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
+
+  while (randomPlayerName === lastSelectedPlayer.name) {
+    randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
+  }
+
+  lastSelectedPlayer = selectedPlayer;
+  selectedPlayer = {
+    name: randomPlayerName,
+    clubs: playersData[randomPlayerName].clubs,
+    position: playersData[randomPlayerName].position,
+    dateOfBirth: playersData[randomPlayerName].dateOfBirth,
+  };
+
+  selectedPlayer.encodedName = encodeURIComponent(selectedPlayer.name);
+}
+
+function updateLiveGuessCount(count) {
+  const liveGuessCount = document.getElementById('liveGuessCount');
+  liveGuessCount.textContent = count;
+}
+
+function displayAnswer() {
+  const answerDisplay = document.getElementById('answerPopupText');
+  answerDisplay.textContent = `The correct answer is: ${selectedPlayer.name}`;
+  document.getElementById('answerPopup').style.display = 'block';
+}
+
+function closeAnswerPopup() {
+  document.getElementById('answerPopup').style.display = 'none';
+}
+
+function showStatsModal() {
+  // Update stats from local storage
+  const stats = JSON.parse(localStorage.getItem('stats'));
+  if (stats) {
+    document.getElementById('games-played').textContent = stats.gamesPlayed;
+    document.getElementById('win-percentage').textContent = stats.winPercentage;
+    document.getElementById('average-guesses').textContent = stats.averageGuesses;
+    document.getElementById('max-streak').textContent = stats.maxStreak;
+    document.getElementById('current-streak').textContent = stats.currentStreak;
+  }
+
+  statsModal.style.display = 'block';
+}
+
+function handleGameOver(correctGuess) {
+  const userGuessInput = document.getElementById('userGuess');
+  userGuessInput.disabled = true;
+  const giveUpButton = document.getElementById('giveUpButton');
+  giveUpButton.disabled = true;
+
+  if (correctGuess) {
+    // Player guessed correctly
+    showStatsModal();
+  } else {
+    // Player gave up
+    displayAnswer();
+
+    setTimeout(() => {
+      getRandomPlayer();
+      startGame();
+    }, 4000);
+  }
+}
+
+function handleCorrectGuess() {
+  const answerDisplay = document.getElementById('answerPopupText');
+  answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
+  showStatsModal();
+
+  document.getElementById('userGuess').disabled = true;
+
+  setTimeout(() => {
+    getRandomPlayer();
+    startGame();
+  }, 2000);
+}
+
+function handleWrongGuess() {
+  const userGuessInput = document.getElementById('userGuess');
+  userGuessInput.classList.add('wrong-guess');
+
+  setTimeout(function () {
+    userGuessInput.classList.remove('wrong-guess');
+  }, 1000);
+}
+
+function handleKeyPress(event) {
+  if (event.key === 'Enter') {
+    if (!document.getElementById('userGuess').disabled) {
+      const userGuess = document.getElementById('userGuess').value;
+      numberOfGuesses++;
+
+      if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
+        handleCorrectGuess();
+      } else {
+        handleWrongGuess();
+        updateLiveGuessCount(maxGuesses - numberOfGuesses);
+
+        if (numberOfGuesses >= maxGuesses) {
+          handleGiveUp();
         }
+      }
+    }
+  }
+}
 
-        #container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px; /* Adjust as needed */
-        }
+function handleGiveUp() {
+  const userGuessInput = document.getElementById('userGuess');
+  userGuessInput.disabled = true;
+  const giveUpButton = document.getElementById('giveUpButton');
+  giveUpButton.disabled = true;
 
-        .active {
-            text-decoration: underline;
-        }
+  displayAnswer();
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+  setTimeout(() => {
+    getRandomPlayer();
+    startGame();
+  }, 4000);
+}
 
-        #logo {
-            max-width: 100%;
-            height: auto;
-            order: 1; /* Positions the logo on the right */
-        }
+document.querySelectorAll('.nationalityButton').forEach(button => {
+  button.addEventListener('click', () => {
+    selectedNationality = button.getAttribute('data-nationality');
+    getRandomPlayer();
+    startGame();
+  });
+});
 
-        #twitter-link {
-            order: 2; /* Positions the Twitter logo on the left */
-        }
+document.getElementById('moreNationalities').addEventListener('change', function () {
+  if (this.value !== "More") {
+    selectedNationality = this.value;
+    getRandomPlayer();
+    startGame();
+  }
+});
 
-        #twitter-link img {
-            max-width: 100%;
-            height: auto;
-        }
+const userGuessInput = document.getElementById('userGuess');
+userGuessInput.addEventListener('keypress', handleKeyPress);
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .close {
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: #000;
-        }
-
-        .close:hover {
-            color: #f00;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <a href="https://twitter.com/Football_Grid_" id="twitter-link" target="_blank">
-            <img src="images/twitter.svg" alt="Twitter Logo">
-        </a>
-        <h1>Football Grid</h1> <!-- Replace the logo with text -->
-    </header>
-
-    <div id="container">
-        <!-- New nationality buttons -->
-        <div id="nationalityButtons">
-            <p>Select a player nationality:</p>
-            <button class="nationalityButton" data-nationality="all">🏆 Hardcore</button>
-            <button class="nationalityButton" data-nationality="English">🇬🇧 English</button>
-            <button class="nationalityButton" data-nationality="French">🇫🇷 French</button>
-            <button class="nationalityButton" data-nationality="German">🇩🇪 German</button>
-            <button class="nationalityButton" data-nationality="Spanish">🇪🇸 Spanish</button>
-            <button class="nationalityButton" data-nationality="Italian">🇮🇹 Italian</button>
-
-            <!-- "More" selector dropdown initially hidden -->
-            <select id="moreNationalities" class="more-dropdown">
-                <option value="More">More</option>
-                <option value="Scottish">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish</option>
-                <option value="Swedish">🇸🇪 Swedish</option>
-                <option value="Danish">🇩🇰 Danish</option>
-                <option value="Austrian">🇦🇹 Austrian</option>
-                <option value="Swiss">🇨🇭 Swiss</option>
-                <option value="Belgian">🇧🇪 Belgian</option>
-                <option value="Brazilian">🇧🇷 Brazilian</option>
-                <option value="Dutch">🇳🇱 Dutch</option>
-            </select>
-        </div>
-        <!-- End of new nationality buttons -->
-        <!-- After the nationality buttons -->
-        <div id="disclaimerText">
-            <p>Club coverage per player might not be exhaustive and may not include teams from third-tier or lower divisions or outside Europe.</p>
-        </div>
-        <div id="dateOfBirthAndClubAndPosition">
-            <!-- Container for club logos and position image, displayed horizontally -->
-        </div>
-        <div style="display: flex;"> <!-- Use a flex container to keep input and button on the same line -->
-            <input type="text" id="userGuess" placeholder="Guess the player">
-            <button id="giveUpButton">Give up</button>
-        </div>
-        <div id="guessCount">GUESSES LEFT: <span id="liveGuessCount" style="color: red;">0</span></div>
-        <div id="guessResult"></div>
-        <div id="answerPopup">
-            <h2 id="answerPopupText"></h2>
-            <button onclick="closeAnswerPopup()">Close</button>
-        </div>
-
-        <!-- Stats Modal -->
-        <div id="stats-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="document.getElementById('stats-modal').style.display='none'">&times;</span>
-                <h2>Stats</h2>
-                <p>Games Played: <span id="games-played"></span></p>
-                <p>Win Percentage: <span id="win-percentage"></span></p>
-                <p>Average Guesses: <span id="average-guesses"></span></p>
-                <p>Max Streak: <span id="max-streak"></span></p>
-                <p>Current Streak: <span id="current-streak"></span></p>
-            </div>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+window.addEventListener('load', () => {
+  loadJSONData();
+  updateActiveNationalityButton(selectedNationality);
+});
