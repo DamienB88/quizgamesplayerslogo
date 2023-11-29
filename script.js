@@ -64,68 +64,51 @@ function closeAnswerPopup() {
   document.getElementById('answerPopup').style.display = 'none';
 }
 
-function loadJSONData() {
-  fetch('data/players.json')
-    .then((response) => response.json())
-    .then((data) => {
-      playersData = data;
-      return fetch('data/clubs.json');
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      clubsData = data;
-      getRandomPlayer();
-      startGame();
-    })
-    .catch((error) => {
-      console.error('Error loading JSON data:', error);
-    });
-}
-
-function startGame() {
-  const dateOfBirthAndClubAndPositionContainer = document.getElementById('dateOfBirthAndClubAndPosition');
-  dateOfBirthAndClubAndPositionContainer.innerHTML = '';
-
-  const dateOfBirthDisplay = document.createElement('div');
-  dateOfBirthDisplay.textContent = `Date of Birth: ${selectedPlayer.dateOfBirth}`;
-  dateOfBirthAndClubAndPositionContainer.appendChild(dateOfBirthDisplay);
-
-  selectedPlayer.clubs.forEach((club) => {
-    const clubLogoUrl = clubsData[club].replace('{playerName}', selectedPlayer.encodedName);
-    if (clubLogoUrl) {
-      const img = document.createElement('img');
-      img.src = clubLogoUrl;
-      img.alt = club;
-      dateOfBirthAndClubAndPositionContainer.appendChild(img);
-    }
-  });
-
-  if (selectedPlayer.position) {
-    const positionImg = document.createElement('img');
-    positionImg.src = `data/${selectedPlayer.position.toLowerCase()}.svg`;
-    positionImg.alt = selectedPlayer.position;
-    dateOfBirthAndClubAndPositionContainer.appendChild(positionImg);
+function showStatsModal() {
+  // Update stats from local storage
+  const stats = JSON.parse(localStorage.getItem('stats'));
+  if (stats) {
+    document.getElementById('games-played').textContent = stats.gamesPlayed;
+    document.getElementById('win-percentage').textContent = stats.winPercentage;
+    document.getElementById('average-guesses').textContent = stats.averageGuesses;
+    document.getElementById('max-streak').textContent = stats.maxStreak;
+    document.getElementById('current-streak').textContent = stats.currentStreak;
   }
 
-  numberOfGuesses = 0;
-  updateLiveGuessCount(maxGuesses);
+  statsModal.style.display = 'block';
+}
 
-  const guessResult = document.getElementById('guessResult');
-  guessResult.textContent = '';
-
+function handleGameOver(correctGuess) {
   const userGuessInput = document.getElementById('userGuess');
-  userGuessInput.disabled = false;
-  userGuessInput.value = '';
-  const answerDisplay = document.getElementById('answerPopup');
-  answerDisplay.style.display = 'none';
-
+  userGuessInput.disabled = true;
   const giveUpButton = document.getElementById('giveUpButton');
-  giveUpButton.disabled = false;
+  giveUpButton.disabled = true;
 
-  giveUpButton.removeEventListener('click', handleGiveUp);
-  giveUpButton.addEventListener('click', handleGiveUp);
+  if (correctGuess) {
+    // Player guessed correctly
+    showStatsModal();
+  } else {
+    // Player gave up
+    displayAnswer();
 
-  updateActiveNationalityButton(selectedNationality);
+    setTimeout(() => {
+      getRandomPlayer();
+      startGame();
+    }, 4000);
+  }
+}
+
+function handleCorrectGuess() {
+  const answerDisplay = document.getElementById('answerPopupText');
+  answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
+  showStatsModal();
+
+  document.getElementById('userGuess').disabled = true;
+
+  setTimeout(() => {
+    getRandomPlayer();
+    startGame();
+  }, 2000);
 }
 
 function handleWrongGuess() {
@@ -144,16 +127,7 @@ function handleKeyPress(event) {
       numberOfGuesses++;
 
       if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
-        const answerDisplay = document.getElementById('answerPopupText');
-        answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
-        document.getElementById('answerPopup').style.display = 'block';
-
-        document.getElementById('userGuess').disabled = true;
-
-        setTimeout(() => {
-          getRandomPlayer();
-          startGame();
-        }, 2000);
+        handleCorrectGuess();
       } else {
         handleWrongGuess();
         updateLiveGuessCount(maxGuesses - numberOfGuesses);
