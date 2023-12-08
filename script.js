@@ -8,7 +8,6 @@ let correctGuesses = parseInt(localStorage.getItem('correctGuesses')) || 0;
 let currentStreak = parseInt(localStorage.getItem('currentStreak')) || 0;
 let maxStreak = parseInt(localStorage.getItem('maxStreak')) || 0;
 const maxGuesses = 6;
-let selectedNationality = "all";
 
 function updateActiveNationalityButton(selectedNationality) {
   document.querySelectorAll('.nationalityButton').forEach(button => {
@@ -120,6 +119,11 @@ function loadJSONData() {
 }
 
 function startGame() {
+    if (!selectedNationality) {
+    // Display a message or handle as appropriate
+    console.log("Please select a nationality before starting the game.");
+    return;
+  }
   const dateOfBirthAndClubAndPositionContainer = document.getElementById('dateOfBirthAndClubAndPosition');
   dateOfBirthAndClubAndPositionContainer.innerHTML = '';
 
@@ -269,5 +273,8 @@ document.getElementById('show-stats-modal').addEventListener('click', () => {
 
 window.addEventListener('load', () => {
   loadJSONData();
-  updateActiveNationalityButton(selectedNationality);
+  // Check if a nationality is selected before updating the UI
+  if (selectedNationality) {
+    updateActiveNationalityButton(selectedNationality);
+  }
 });
