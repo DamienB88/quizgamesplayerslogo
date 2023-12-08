@@ -66,7 +66,7 @@ function displayAnswer() {
   // Display stats modal after a delay
   setTimeout(() => {
     displayStatsModal();
-  }, 2000); // Adjust the delay as needed
+  }, 2); // Adjust the delay as needed
 }
 
 function displayStatsModal() {
@@ -201,7 +201,7 @@ function handleKeyPress(event) {
         setTimeout(() => {
           getRandomPlayer();
           startGame();
-        }, 2000);
+        }, 2);
       } else {
         // Update stats for wrong guess
         currentStreak = 0;
