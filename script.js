@@ -234,7 +234,7 @@ function handleGiveUp() {
   // Display stats modal after a delay
   setTimeout(() => {
     displayStatsModal();
-  }, 4000); // Adjust the delay as needed
+  }, 4); // Adjust the delay as needed
 }
 
 function updateLocalStorage() {
