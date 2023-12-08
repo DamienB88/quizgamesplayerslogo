@@ -9,6 +9,20 @@ let currentStreak = parseInt(localStorage.getItem('currentStreak')) || 0;
 let maxStreak = parseInt(localStorage.getItem('maxStreak')) || 0;
 const maxGuesses = 6;
 
+function isGamePlayedTodayWithNationality(selectedNationality) {
+  const currentDate = getCurrentDate();
+  const lastPlayedDate = localStorage.getItem(`lastPlayedDate_${selectedNationality}`);
+  return lastPlayedDate === currentDate;
+}
+
+function getCurrentDate() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function updateActiveNationalityButton(selectedNationality) {
   document.querySelectorAll('.nationalityButton').forEach(button => {
     if (button.getAttribute('data-nationality') === selectedNationality) {
@@ -124,6 +138,12 @@ function startGame() {
     console.log("Please select a nationality before starting the game.");
     return;
   }
+
+    if (isGamePlayedTodayWithNationality(selectedNationality)) {
+    // Display a message or handle as appropriate
+    console.log(`A game with ${selectedNationality} has already been played today.`);
+    return;
+  }
   const dateOfBirthAndClubAndPositionContainer = document.getElementById('dateOfBirthAndClubAndPosition');
   dateOfBirthAndClubAndPositionContainer.innerHTML = '';
 
@@ -235,6 +255,9 @@ function handleGiveUp() {
   // Update local storage for stats
   updateLocalStorage();
 
+  // Store the last played date for the selected nationality
+  localStorage.setItem(`lastPlayedDate_${selectedNationality}`, getCurrentDate());
+  
   // Display stats modal after a delay
   setTimeout(() => {
     displayStatsModal();
