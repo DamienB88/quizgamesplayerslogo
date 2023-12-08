@@ -10,12 +10,6 @@ let maxStreak = parseInt(localStorage.getItem('maxStreak')) || 0;
 const maxGuesses = 6;
 let selectedNationality = "all";
 
-function isGamePlayedToday() {
-  const currentDate = getCurrentDate();
-  const lastPlayedDate = localStorage.getItem('lastPlayedDate');
-  return lastPlayedDate === currentDate;
-}
-
 function updateActiveNationalityButton(selectedNationality) {
   document.querySelectorAll('.nationalityButton').forEach(button => {
     if (button.getAttribute('data-nationality') === selectedNationality) {
@@ -259,7 +253,7 @@ document.querySelectorAll('.nationalityButton').forEach(button => {
 });
 
 document.getElementById('moreNationalities').addEventListener('change', function () {
-  if (this.value !== "More" && !isGamePlayedToday()) {
+  if (this.value !== "More") {
     selectedNationality = this.value;
     getRandomPlayer();
     startGame();
@@ -274,9 +268,6 @@ document.getElementById('show-stats-modal').addEventListener('click', () => {
 });
 
 window.addEventListener('load', () => {
-  if (!isGamePlayedToday()) {
-    loadJSONData();
-    updateActiveNationalityButton(selectedNationality);
-  }
+  loadJSONData();
+  updateActiveNationalityButton(selectedNationality);
 });
-
