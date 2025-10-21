@@ -3,192 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flag Quiz Challenge</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        #container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px; /* Adjust as needed */
-        }
-
-        .active {
-            text-decoration: underline;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        #logo {
-            max-width: 100%;
-            height: auto;
-            order: 1; /* Positions the logo on the right */
-        }
-
-        #twitter-link {
-            order: 2; /* Positions the Twitter logo on the left */
-        }
-
-        #twitter-link img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Styles for the modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-  background-color: #1a1a1a; /* Darker background color */
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  position: relative;
-}
-
-.close {
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
-  color: #fff; /* White color for the close button */
-}
-
-        .close:hover {
-          color: #f00;
-        }
-
-        /* Styles for stat boxes */
-.stat-box {
-  background-color: #2c2c2c; /* Background color for stat boxes */
-  padding: 10px;
-  text-align: center;
-  margin: 10px;
-}
-
-.stat-value {
-  /* Set the size, boldness, and color for stat values */
-  font-size: 18px; /* Adjust as needed */
-  font-weight: bold;
-  color: #fff; /* White color for stat values */
-}
-
-.stat-text {
-  /* Set the size, boldness, and color for stat texts */
-  font-size: 14px; /* Adjust as needed */
-  font-weight: bold;
-  color: #ccc; /* Light gray color for stat texts */
-}
-    </style>
 </head>
 <body>
-    <header>
-        <a href="https://twitter.com/Football_Grid_" id="twitter-link" target="_blank">
-            <img src="images/twitter.svg" alt="Twitter Logo">
-        </a>
-        <h1>Football Grid</h1> <!-- Replace the logo with text -->
-    </header>
+    <div class="container">
+        <header>
+            <h1>Flag Quiz Challenge</h1>
+            <div class="stats-header">
+                <span id="score">Score: 0</span>
+                <span id="streak">Streak: 0</span>
+            </div>
+        </header>
 
-    <div id="container">
-        <!-- New nationality buttons -->
-        <div id="nationalityButtons">
-            <p>Select a player nationality:</p>
-            <button class="nationalityButton" data-nationality="all">🏆 Hardcore</button>
-            <button class="nationalityButton" data-nationality="English">🇬🇧 English</button>
-            <button class="nationalityButton" data-nationality="French">🇫🇷 French</button>
-            <button class="nationalityButton" data-nationality="German">🇩🇪 German</button>
-            <button class="nationalityButton" data-nationality="Spanish">🇪🇸 Spanish</button>
-            <button class="nationalityButton" data-nationality="Italian">🇮🇹 Italian</button>
+        <!-- Game Mode Selection -->
+        <div id="mode-selection" class="mode-selection">
+            <h2>Choose Your Challenge Mode</h2>
+            <div class="mode-buttons">
+                <button class="mode-btn" data-mode="normal">
+                    <span class="mode-icon">🚩</span>
+                    <span class="mode-name">Normal Mode</span>
+                    <span class="mode-desc">Standard flag guessing</span>
+                </button>
+                <button class="mode-btn" data-mode="upside-down">
+                    <span class="mode-icon">🔄</span>
+                    <span class="mode-name">Upside Down</span>
+                    <span class="mode-desc">Flags are flipped 180°</span>
+                </button>
+                <button class="mode-btn" data-mode="half">
+                    <span class="mode-icon">✂️</span>
+                    <span class="mode-name">Half Flag</span>
+                    <span class="mode-desc">Only half the flag shown</span>
+                </button>
+                <button class="mode-btn" data-mode="flash">
+                    <span class="mode-icon">⚡</span>
+                    <span class="mode-name">Flash Mode</span>
+                    <span class="mode-desc">Flag shown for 0.2 seconds</span>
+                </button>
+                <button class="mode-btn" data-mode="color-swap">
+                    <span class="mode-icon">🎨</span>
+                    <span class="mode-name">Color Swap</span>
+                    <span class="mode-desc">Colors are inverted</span>
+                </button>
+            </div>
+        </div>
 
-            <!-- "More" selector dropdown initially hidden -->
-            <select id="moreNationalities" class="more-dropdown">
-                <option value="More">More</option>
-                <option value="Scottish">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish</option>
-                <option value="Swedish">🇸🇪 Swedish</option>
-                <option value="Danish">🇩🇰 Danish</option>
-                <option value="Austrian">🇦🇹 Austrian</option>
-                <option value="Swiss">🇨🇭 Swiss</option>
-                <option value="Belgian">🇧🇪 Belgian</option>
-                <option value="Brazilian">🇧🇷 Brazilian</option>
-                <option value="Dutch">🇳🇱 Dutch</option>
-            </select>
-        </div>
-        <!-- End of new nationality buttons -->
-        <!-- After the nationality buttons -->
-        <div id="disclaimerText">
-            <p>Club coverage per player might not be exhaustive and may not include teams from third-tier or lower divisions or outside Europe.</p>
-        </div>
-        <div id="dateOfBirthAndClubAndPosition">
-            <!-- Container for club logos and position image, displayed horizontally -->
-        </div>
-        <div style="display: flex;"> <!-- Use a flex container to keep input and button on the same line -->
-            <input type="text" id="userGuess" placeholder="Guess the player">
-            <button id="giveUpButton">Give up</button>
-        </div>
-        <div id="guessCount">GUESSES LEFT: <span id="liveGuessCount" style="color: red;">0</span></div>
-        <div id="guessResult"></div>
-        <div id="answerPopup">
-          <h2 id="answerPopupText"></h2>
-          <button onclick="closeAnswerPopup()">Close</button>
-        </div>
-        <!-- Stats Modal Trigger -->
-        <button id="show-stats-modal">Show Stats</button>
-    </div>
+        <!-- Game Area -->
+        <div id="game-area" class="game-area hidden">
+            <div class="game-header">
+                <button id="change-mode-btn" class="change-mode-btn">Change Mode</button>
+                <div class="mode-indicator">
+                    <span id="current-mode-text">Normal Mode</span>
+                </div>
+                <div class="question-counter">
+                    <span id="question-number">Question 1/10</span>
+                </div>
+            </div>
 
-    <!-- Stats Modal -->
-    <div id="stats-modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeStatsModal()">&times;</span>
-        <h2 style="text-align: center; color: #fff;">Stats</h2>
-        <div style="display: flex; justify-content: space-around;">
-          <div class="stat-box">
-            <span id="games-played" class="stat-value">6</span>
-            <p class="stat-text">Games Played</p>
-          </div>
-          <div class="stat-box">
-            <span id="win-percentage" class="stat-value">75%</span>
-            <p class="stat-text">Win Percentage</p>
-          </div>
-          <div class="stat-box">
-            <span id="average-guesses" class="stat-value">4</span>
-            <p class="stat-text">Average Guesses</p>
-          </div>
-          <div class="stat-box">
-            <span id="max-streak" class="stat-value">3</span>
-            <p class="stat-text">Max Streak</p>
-          </div>
-          <div class="stat-box">
-            <span id="current-streak" class="stat-value">1</span>
-            <p class="stat-text">Current Streak</p>
-          </div>
+            <div class="flag-container">
+                <div id="flag-display" class="flag-display">
+                    <img id="flag-image" src="" alt="Flag">
+                    <div id="flash-overlay" class="flash-overlay hidden">
+                        <p>Flag was shown!</p>
+                        <p>What country was it?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <input type="text" id="answer-input" placeholder="Enter country name..." autocomplete="off">
+                <div class="button-group">
+                    <button id="submit-btn" class="submit-btn">Submit</button>
+                    <button id="skip-btn" class="skip-btn">Skip</button>
+                </div>
+                <div id="feedback" class="feedback"></div>
+            </div>
+
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
         </div>
-      </div>
+
+        <!-- Results Modal -->
+        <div id="results-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Quiz Complete!</h2>
+                <div class="results-stats">
+                    <div class="result-item">
+                        <span class="result-label">Score:</span>
+                        <span id="final-score" class="result-value">0/10</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Accuracy:</span>
+                        <span id="accuracy" class="result-value">0%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Max Streak:</span>
+                        <span id="max-streak" class="result-value">0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Mode:</span>
+                        <span id="mode-played" class="result-value">Normal</span>
+                    </div>
+                </div>
+                <div class="results-buttons">
+                    <button id="play-again-btn" class="play-again-btn">Play Again</button>
+                    <button id="change-mode-results-btn" class="change-mode-btn">Change Mode</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

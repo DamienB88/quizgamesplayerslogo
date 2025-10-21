@@ -1,303 +1,369 @@
-let playersData = {};
-let clubsData = {};
-let selectedPlayer = {};
-let lastSelectedPlayer = {};
-let numberOfGuesses = 0;
-let gamesPlayed = parseInt(localStorage.getItem('gamesPlayed')) || 0;
-let correctGuesses = parseInt(localStorage.getItem('correctGuesses')) || 0;
-let currentStreak = parseInt(localStorage.getItem('currentStreak')) || 0;
-let maxStreak = parseInt(localStorage.getItem('maxStreak')) || 0;
-const maxGuesses = 6;
+// Flag Quiz Game with Multiple Modes
 
-function isGamePlayedTodayWithNationality(selectedNationality) {
-  const currentDate = getCurrentDate();
-  const lastPlayedDate = localStorage.getItem(`lastPlayedDate_${selectedNationality}`);
-  return lastPlayedDate === currentDate;
-}
+// Country data with flag codes
+const countries = [
+    { name: 'United States', code: 'us', aliases: ['usa', 'america', 'united states of america'] },
+    { name: 'United Kingdom', code: 'gb', aliases: ['uk', 'britain', 'great britain', 'england'] },
+    { name: 'Canada', code: 'ca', aliases: [] },
+    { name: 'France', code: 'fr', aliases: [] },
+    { name: 'Germany', code: 'de', aliases: ['deutschland'] },
+    { name: 'Italy', code: 'it', aliases: ['italia'] },
+    { name: 'Spain', code: 'es', aliases: ['espana', 'españa'] },
+    { name: 'Japan', code: 'jp', aliases: ['nippon'] },
+    { name: 'China', code: 'cn', aliases: ['prc', 'peoples republic of china'] },
+    { name: 'Brazil', code: 'br', aliases: ['brasil'] },
+    { name: 'Australia', code: 'au', aliases: [] },
+    { name: 'India', code: 'in', aliases: ['bharat'] },
+    { name: 'Mexico', code: 'mx', aliases: [] },
+    { name: 'Russia', code: 'ru', aliases: ['russian federation'] },
+    { name: 'South Korea', code: 'kr', aliases: ['korea', 'republic of korea', 'south corea'] },
+    { name: 'Argentina', code: 'ar', aliases: [] },
+    { name: 'Netherlands', code: 'nl', aliases: ['holland'] },
+    { name: 'Sweden', code: 'se', aliases: [] },
+    { name: 'Norway', code: 'no', aliases: [] },
+    { name: 'Denmark', code: 'dk', aliases: [] },
+    { name: 'Finland', code: 'fi', aliases: [] },
+    { name: 'Poland', code: 'pl', aliases: ['polska'] },
+    { name: 'Switzerland', code: 'ch', aliases: [] },
+    { name: 'Belgium', code: 'be', aliases: [] },
+    { name: 'Austria', code: 'at', aliases: [] },
+    { name: 'Portugal', code: 'pt', aliases: [] },
+    { name: 'Greece', code: 'gr', aliases: ['hellas'] },
+    { name: 'Turkey', code: 'tr', aliases: ['turkiye'] },
+    { name: 'South Africa', code: 'za', aliases: [] },
+    { name: 'Egypt', code: 'eg', aliases: [] },
+    { name: 'Nigeria', code: 'ng', aliases: [] },
+    { name: 'Kenya', code: 'ke', aliases: [] },
+    { name: 'Thailand', code: 'th', aliases: [] },
+    { name: 'Vietnam', code: 'vn', aliases: [] },
+    { name: 'Indonesia', code: 'id', aliases: [] },
+    { name: 'Philippines', code: 'ph', aliases: [] },
+    { name: 'Malaysia', code: 'my', aliases: [] },
+    { name: 'Singapore', code: 'sg', aliases: [] },
+    { name: 'New Zealand', code: 'nz', aliases: [] },
+    { name: 'Ireland', code: 'ie', aliases: ['eire'] },
+    { name: 'Iceland', code: 'is', aliases: ['island'] },
+    { name: 'Chile', code: 'cl', aliases: [] },
+    { name: 'Peru', code: 'pe', aliases: [] },
+    { name: 'Colombia', code: 'co', aliases: [] },
+    { name: 'Venezuela', code: 've', aliases: [] },
+    { name: 'Ukraine', code: 'ua', aliases: [] },
+    { name: 'Czech Republic', code: 'cz', aliases: ['czechia'] },
+    { name: 'Hungary', code: 'hu', aliases: [] },
+    { name: 'Romania', code: 'ro', aliases: [] },
+    { name: 'Bulgaria', code: 'bg', aliases: [] },
+    { name: 'Croatia', code: 'hr', aliases: ['hrvatska'] },
+    { name: 'Serbia', code: 'rs', aliases: [] },
+    { name: 'Slovakia', code: 'sk', aliases: [] },
+    { name: 'Slovenia', code: 'si', aliases: [] },
+    { name: 'Lithuania', code: 'lt', aliases: [] },
+    { name: 'Latvia', code: 'lv', aliases: [] },
+    { name: 'Estonia', code: 'ee', aliases: [] },
+    { name: 'Morocco', code: 'ma', aliases: [] },
+    { name: 'Algeria', code: 'dz', aliases: [] },
+    { name: 'Tunisia', code: 'tn', aliases: [] },
+    { name: 'Israel', code: 'il', aliases: [] },
+    { name: 'Saudi Arabia', code: 'sa', aliases: [] },
+    { name: 'United Arab Emirates', code: 'ae', aliases: ['uae', 'emirates'] },
+    { name: 'Qatar', code: 'qa', aliases: [] },
+    { name: 'Kuwait', code: 'kw', aliases: [] },
+    { name: 'Iraq', code: 'iq', aliases: [] },
+    { name: 'Iran', code: 'ir', aliases: [] },
+    { name: 'Pakistan', code: 'pk', aliases: [] },
+    { name: 'Bangladesh', code: 'bd', aliases: [] },
+    { name: 'Afghanistan', code: 'af', aliases: [] },
+    { name: 'Nepal', code: 'np', aliases: [] },
+    { name: 'Sri Lanka', code: 'lk', aliases: [] }
+];
 
-function getCurrentDate() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+// Game state
+let currentMode = 'normal';
+let currentQuestion = 0;
+let score = 0;
+let streak = 0;
+let maxStreak = 0;
+let totalQuestions = 10;
+let usedCountries = [];
+let currentCountry = null;
+let gameActive = false;
 
-function updateActiveNationalityButton(selectedNationality) {
-  document.querySelectorAll('.nationalityButton').forEach(button => {
-    if (button.getAttribute('data-nationality') === selectedNationality) {
-      button.classList.add('active');
-    } else {
-      button.classList.remove('active');
-    }
-  });
+// DOM elements
+const modeSelection = document.getElementById('mode-selection');
+const gameArea = document.getElementById('game-area');
+const resultsModal = document.getElementById('results-modal');
+const flagImage = document.getElementById('flag-image');
+const flagDisplay = document.getElementById('flag-display');
+const flashOverlay = document.getElementById('flash-overlay');
+const answerInput = document.getElementById('answer-input');
+const submitBtn = document.getElementById('submit-btn');
+const skipBtn = document.getElementById('skip-btn');
+const feedback = document.getElementById('feedback');
+const scoreDisplay = document.getElementById('score');
+const streakDisplay = document.getElementById('streak');
+const questionNumber = document.getElementById('question-number');
+const progressFill = document.getElementById('progress-fill');
+const currentModeText = document.getElementById('current-mode-text');
+const changeModeBtn = document.getElementById('change-mode-btn');
+const playAgainBtn = document.getElementById('play-again-btn');
+const changeModeResultsBtn = document.getElementById('change-mode-results-btn');
 
-  const moreNationalitiesDropdown = document.getElementById('moreNationalities');
-  const dropdownOptions = moreNationalitiesDropdown.options;
-  for (let i = 0; i < dropdownOptions.length; i++) {
-    const option = dropdownOptions[i];
-    if (option.value === selectedNationality) {
-      option.classList.add('active');
-    } else {
-      option.classList.remove('active');
-    }
-  }
-}
-
-function getRandomPlayer() {
-  const playerNames = Object.keys(playersData).filter(
-    playerName => selectedNationality === "all" || playersData[playerName].nationality === selectedNationality
-  );
-
-  let randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
-
-  while (randomPlayerName === lastSelectedPlayer.name) {
-    randomPlayerName = playerNames[Math.floor(Math.random() * playerNames.length)];
-  }
-
-  lastSelectedPlayer = selectedPlayer;
-  selectedPlayer = {
-    name: randomPlayerName,
-    clubs: playersData[randomPlayerName].clubs,
-    position: playersData[randomPlayerName].position,
-    dateOfBirth: playersData[randomPlayerName].dateOfBirth,
-  };
-
-  selectedPlayer.encodedName = encodeURIComponent(selectedPlayer.name);
-}
-
-function updateLiveGuessCount(count) {
-  const liveGuessCount = document.getElementById('liveGuessCount');
-  liveGuessCount.textContent = count;
-}
-
-function displayAnswer() {
-  const answerDisplay = document.getElementById('answerPopupText');
-  answerDisplay.textContent = `The correct answer is: ${selectedPlayer.name}`;
-  document.getElementById('answerPopup').style.display = 'block';
-
-  // Display stats modal after a delay
-  setTimeout(() => {
-    displayStatsModal();
-  }, 2); // Adjust the delay as needed
-}
-
-function displayStatsModal() {
-  // Update and display the stats in the modal
-  const gamesPlayedSpan = document.getElementById('games-played');
-  gamesPlayedSpan.textContent = gamesPlayed;
-
-  const winPercentageSpan = document.getElementById('win-percentage');
-  const winPercentage = gamesPlayed === 0 ? 0 : ((correctGuesses / gamesPlayed) * 100).toFixed(2);
-  winPercentageSpan.textContent = `${winPercentage}%`;
-
-  const averageGuessesSpan = document.getElementById('average-guesses');
-  const averageGuesses = gamesPlayed === 0 ? 0 : (numberOfGuesses / gamesPlayed).toFixed(2);
-  averageGuessesSpan.textContent = averageGuesses;
-
-  const maxStreakSpan = document.getElementById('max-streak');
-  maxStreakSpan.textContent = maxStreak;
-
-  const currentStreakSpan = document.getElementById('current-streak');
-  currentStreakSpan.textContent = currentStreak;
-
-  // Show the stats modal
-  const statsModal = document.getElementById('stats-modal');
-  statsModal.style.display = 'block';
-}
-
-function closeAnswerPopup() {
-  document.getElementById('answerPopup').style.display = 'none';
-}
-
-function closeStatsModal() {
-  document.getElementById('stats-modal').style.display = 'none';
-}
-
-function loadJSONData() {
-  fetch('data/players.json')
-    .then((response) => response.json())
-    .then((data) => {
-      playersData = data;
-      return fetch('data/clubs.json');
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      clubsData = data;
-      getRandomPlayer();
-      startGame();
-    })
-    .catch((error) => {
-      console.error('Error loading JSON data:', error);
+// Mode selection
+document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentMode = btn.dataset.mode;
+        startGame();
     });
-}
+});
 
+// Change mode buttons
+changeModeBtn.addEventListener('click', () => {
+    gameArea.classList.add('hidden');
+    modeSelection.classList.remove('hidden');
+    resetGame();
+});
+
+changeModeResultsBtn.addEventListener('click', () => {
+    resultsModal.classList.add('hidden');
+    modeSelection.classList.remove('hidden');
+    resetGame();
+});
+
+// Play again button
+playAgainBtn.addEventListener('click', () => {
+    resultsModal.classList.add('hidden');
+    startGame();
+});
+
+// Submit and skip buttons
+submitBtn.addEventListener('click', checkAnswer);
+skipBtn.addEventListener('click', skipQuestion);
+
+// Enter key to submit
+answerInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        checkAnswer();
+    }
+});
+
+// Start game
 function startGame() {
-    if (!selectedNationality) {
-    // Display a message or handle as appropriate
-    console.log("Please select a nationality before starting the game.");
-    return;
-  }
+    modeSelection.classList.add('hidden');
+    gameArea.classList.remove('hidden');
 
-    if (isGamePlayedTodayWithNationality(selectedNationality)) {
-    // Display a message or handle as appropriate
-    console.log(`A game with ${selectedNationality} has already been played today.`);
-    return;
-  }
-  const dateOfBirthAndClubAndPositionContainer = document.getElementById('dateOfBirthAndClubAndPosition');
-  dateOfBirthAndClubAndPositionContainer.innerHTML = '';
+    currentQuestion = 0;
+    score = 0;
+    streak = 0;
+    maxStreak = 0;
+    usedCountries = [];
+    gameActive = true;
 
-  const dateOfBirthDisplay = document.createElement('div');
-  dateOfBirthDisplay.textContent = `Date of Birth: ${selectedPlayer.dateOfBirth}`;
-  dateOfBirthAndClubAndPositionContainer.appendChild(dateOfBirthDisplay);
+    updateModeText();
+    updateDisplay();
+    loadNextQuestion();
+}
 
-  selectedPlayer.clubs.forEach((club) => {
-    const clubLogoUrl = clubsData[club].replace('{playerName}', selectedPlayer.encodedName);
-    if (clubLogoUrl) {
-      const img = document.createElement('img');
-      img.src = clubLogoUrl;
-      img.alt = club;
-      dateOfBirthAndClubAndPositionContainer.appendChild(img);
+// Reset game
+function resetGame() {
+    currentQuestion = 0;
+    score = 0;
+    streak = 0;
+    maxStreak = 0;
+    usedCountries = [];
+    gameActive = false;
+}
+
+// Update mode text
+function updateModeText() {
+    const modeNames = {
+        'normal': 'Normal Mode',
+        'upside-down': 'Upside Down Mode',
+        'half': 'Half Flag Mode',
+        'flash': 'Flash Mode',
+        'color-swap': 'Color Swap Mode'
+    };
+    currentModeText.textContent = modeNames[currentMode];
+}
+
+// Update display
+function updateDisplay() {
+    scoreDisplay.textContent = `Score: ${score}/${totalQuestions}`;
+    streakDisplay.textContent = `Streak: ${streak}`;
+    questionNumber.textContent = `Question ${currentQuestion + 1}/${totalQuestions}`;
+    progressFill.style.width = `${(currentQuestion / totalQuestions) * 100}%`;
+}
+
+// Get random unused country
+function getRandomCountry() {
+    const availableCountries = countries.filter(c => !usedCountries.includes(c.code));
+    if (availableCountries.length === 0) return null;
+
+    const randomIndex = Math.floor(Math.random() * availableCountries.length);
+    const country = availableCountries[randomIndex];
+    usedCountries.push(country.code);
+    return country;
+}
+
+// Load next question
+function loadNextQuestion() {
+    if (currentQuestion >= totalQuestions) {
+        endGame();
+        return;
     }
-  });
 
-  if (selectedPlayer.position) {
-    const positionImg = document.createElement('img');
-    positionImg.src = `data/${selectedPlayer.position.toLowerCase()}.svg`;
-    positionImg.alt = selectedPlayer.position;
-    dateOfBirthAndClubAndPositionContainer.appendChild(positionImg);
-  }
-
-  numberOfGuesses = 0;
-  updateLiveGuessCount(maxGuesses);
-
-  const guessResult = document.getElementById('guessResult');
-  guessResult.textContent = '';
-
-  const userGuessInput = document.getElementById('userGuess');
-  userGuessInput.disabled = false;
-  userGuessInput.value = '';
-  const answerDisplay = document.getElementById('answerPopup');
-  answerDisplay.style.display = 'none';
-
-  const giveUpButton = document.getElementById('giveUpButton');
-  giveUpButton.disabled = false;
-
-  giveUpButton.removeEventListener('click', handleGiveUp);
-  giveUpButton.addEventListener('click', handleGiveUp);
-
-  updateActiveNationalityButton(selectedNationality);
-}
-
-function handleWrongGuess() {
-  const userGuessInput = document.getElementById('userGuess');
-  userGuessInput.classList.add('wrong-guess');
-
-  setTimeout(function () {
-    userGuessInput.classList.remove('wrong-guess');
-  }, 1000);
-}
-
-function handleKeyPress(event) {
-  if (event.key === 'Enter') {
-    if (!document.getElementById('userGuess').disabled) {
-      const userGuess = document.getElementById('userGuess').value;
-      numberOfGuesses++;
-
-      if (userGuess.toLowerCase() === selectedPlayer.name.toLowerCase()) {
-        // Update stats for correct guess
-        gamesPlayed++;
-        correctGuesses++;
-        currentStreak++;
-        if (currentStreak > maxStreak) {
-          maxStreak = currentStreak;
-        }
-
-        const answerDisplay = document.getElementById('answerPopupText');
-        answerDisplay.textContent = `Correct! You guessed it in ${numberOfGuesses} guesses.`;
-        document.getElementById('answerPopup').style.display = 'block';
-
-        document.getElementById('userGuess').disabled = true;
-
-        // Update local storage for stats
-        updateLocalStorage();
-
-        setTimeout(() => {
-          getRandomPlayer();
-          startGame();
-        }, 2);
-      } else {
-        // Update stats for wrong guess
-        currentStreak = 0;
-        handleWrongGuess();
-        updateLiveGuessCount(maxGuesses - numberOfGuesses);
-
-        if (numberOfGuesses >= maxGuesses) {
-          handleGiveUp();
-        }
-      }
+    currentCountry = getRandomCountry();
+    if (!currentCountry) {
+        endGame();
+        return;
     }
-  }
+
+    answerInput.value = '';
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+
+    displayFlag();
+    updateDisplay();
 }
 
-function handleGiveUp() {
-  const userGuessInput = document.getElementById('userGuess');
-  userGuessInput.disabled = true;
-  const giveUpButton = document.getElementById('giveUpButton');
-  giveUpButton.disabled = true;
+// Display flag based on mode
+function displayFlag() {
+    const flagUrl = `https://flagcdn.com/w640/${currentCountry.code}.png`;
+    flagImage.src = flagUrl;
 
-  // Update stats for giving up
-  gamesPlayed++;
-  currentStreak = 0;
+    // Reset all mode styles
+    flagImage.style.transform = '';
+    flagImage.style.filter = '';
+    flagDisplay.style.clipPath = '';
+    flashOverlay.classList.add('hidden');
 
-  displayAnswer();
-
-  // Update local storage for stats
-  updateLocalStorage();
-
-  // Store the last played date for the selected nationality
-  localStorage.setItem(`lastPlayedDate_${selectedNationality}`, getCurrentDate());
-  
-  // Display stats modal after a delay
-  setTimeout(() => {
-    displayStatsModal();
-  }, 4); // Adjust the delay as needed
+    // Apply mode-specific effects
+    switch(currentMode) {
+        case 'upside-down':
+            applyUpsideDown();
+            break;
+        case 'half':
+            applyHalfFlag();
+            break;
+        case 'flash':
+            applyFlashMode();
+            break;
+        case 'color-swap':
+            applyColorSwap();
+            break;
+        default:
+            // Normal mode - no special effects
+            break;
+    }
 }
 
-function updateLocalStorage() {
-  localStorage.setItem('gamesPlayed', gamesPlayed.toString());
-  localStorage.setItem('correctGuesses', correctGuesses.toString());
-  localStorage.setItem('currentStreak', currentStreak.toString());
-  localStorage.setItem('maxStreak', maxStreak.toString());
+// Mode implementations
+function applyUpsideDown() {
+    flagImage.style.transform = 'rotate(180deg)';
 }
 
-document.querySelectorAll('.nationalityButton').forEach(button => {
-  button.addEventListener('click', () => {
-    selectedNationality = button.getAttribute('data-nationality');
-    getRandomPlayer();
-    startGame();
-  });
-});
+function applyHalfFlag() {
+    // Show only left half of the flag
+    flagDisplay.style.clipPath = 'inset(0 50% 0 0)';
+}
 
-document.getElementById('moreNationalities').addEventListener('change', function () {
-  if (this.value !== "More") {
-    selectedNationality = this.value;
-    getRandomPlayer();
-    startGame();
-  }
-});
+function applyFlashMode() {
+    // Show flag for 0.2 seconds, then hide it
+    flashOverlay.classList.add('hidden');
+    flagImage.style.opacity = '1';
 
-const userGuessInput = document.getElementById('userGuess');
-userGuessInput.addEventListener('keypress', handleKeyPress);
+    setTimeout(() => {
+        flagImage.style.opacity = '0';
+        flashOverlay.classList.remove('hidden');
+    }, 200);
+}
 
-document.getElementById('show-stats-modal').addEventListener('click', () => {
-  displayStatsModal();
-});
+function applyColorSwap() {
+    // Invert colors
+    flagImage.style.filter = 'invert(1) hue-rotate(180deg)';
+}
 
-window.addEventListener('load', () => {
-  loadJSONData();
-  // Check if a nationality is selected before updating the UI
-  if (selectedNationality) {
-    updateActiveNationalityButton(selectedNationality);
-  }
+// Check answer
+function checkAnswer() {
+    if (!gameActive || !currentCountry) return;
+
+    const userAnswer = answerInput.value.trim().toLowerCase();
+    if (!userAnswer) return;
+
+    const correctName = currentCountry.name.toLowerCase();
+    const aliases = currentCountry.aliases.map(a => a.toLowerCase());
+    const allValidAnswers = [correctName, ...aliases];
+
+    const isCorrect = allValidAnswers.some(validAnswer => {
+        // Allow for minor spelling variations
+        return userAnswer === validAnswer ||
+               validAnswer.includes(userAnswer) ||
+               userAnswer.includes(validAnswer);
+    });
+
+    if (isCorrect) {
+        score++;
+        streak++;
+        if (streak > maxStreak) maxStreak = streak;
+        showFeedback(true, currentCountry.name);
+    } else {
+        streak = 0;
+        showFeedback(false, currentCountry.name);
+    }
+
+    currentQuestion++;
+
+    setTimeout(() => {
+        loadNextQuestion();
+    }, 1500);
+}
+
+// Skip question
+function skipQuestion() {
+    if (!gameActive || !currentCountry) return;
+
+    streak = 0;
+    showFeedback(false, currentCountry.name, true);
+    currentQuestion++;
+
+    setTimeout(() => {
+        loadNextQuestion();
+    }, 1500);
+}
+
+// Show feedback
+function showFeedback(correct, correctAnswer, skipped = false) {
+    feedback.className = 'feedback';
+
+    if (correct) {
+        feedback.classList.add('correct');
+        feedback.textContent = `Correct! It was ${correctAnswer}`;
+    } else {
+        feedback.classList.add('incorrect');
+        if (skipped) {
+            feedback.textContent = `Skipped. It was ${correctAnswer}`;
+        } else {
+            feedback.textContent = `Incorrect. It was ${correctAnswer}`;
+        }
+    }
+
+    updateDisplay();
+}
+
+// End game
+function endGame() {
+    gameActive = false;
+    gameArea.classList.add('hidden');
+    resultsModal.classList.remove('hidden');
+
+    document.getElementById('final-score').textContent = `${score}/${totalQuestions}`;
+    document.getElementById('accuracy').textContent = `${Math.round((score / totalQuestions) * 100)}%`;
+    document.getElementById('max-streak').textContent = maxStreak;
+    document.getElementById('mode-played').textContent = currentModeText.textContent;
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    // Show mode selection on load
+    modeSelection.classList.remove('hidden');
+    gameArea.classList.add('hidden');
+    resultsModal.classList.add('hidden');
 });
