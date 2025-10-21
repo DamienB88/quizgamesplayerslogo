@@ -40,11 +40,6 @@
                     <span class="mode-name">Flash Mode</span>
                     <span class="mode-desc">Flag shown for 0.2 seconds</span>
                 </button>
-                <button class="mode-btn" data-mode="color-swap">
-                    <span class="mode-icon">🎨</span>
-                    <span class="mode-name">Color Swap</span>
-                    <span class="mode-desc">Colors are inverted</span>
-                </button>
             </div>
         </div>
 
@@ -66,6 +61,11 @@
                     <div id="flash-overlay" class="flash-overlay hidden">
                         <p>Flag was shown!</p>
                         <p>What country was it?</p>
+                    </div>
+                    <div id="flash-ready-overlay" class="flash-ready-overlay hidden">
+                        <p>Get Ready!</p>
+                        <p>The flag will appear for 0.2 seconds</p>
+                        <button id="ready-btn" class="ready-btn">I'm Ready!</button>
                     </div>
                 </div>
             </div>
