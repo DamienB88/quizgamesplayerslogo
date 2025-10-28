@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Ensure commit messages follow conventional commits format
+# This can be extended with commitlint if needed
