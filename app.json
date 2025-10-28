@@ -1,0 +1,85 @@
+{
+  "expo": {
+    "name": "PrivacyFirst Social",
+    "slug": "privacy-first-social",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.privacyfirst.social",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library to select random photos for sharing with your private groups. Your photos never leave your device until you choose to share them.",
+        "NSPhotoLibraryAddUsageDescription": "We need permission to save photos from your feed to your library.",
+        "NSCameraUsageDescription": "We need camera access to take photos for sharing.",
+        "NSFaceIDUsageDescription": "We use Face ID to securely authenticate you and protect your privacy.",
+        "NSUserNotificationsUsageDescription": "We send you notifications when it's time to review your daily photo selection."
+      },
+      "privacyManifests": {
+        "NSPrivacyAccessedAPITypes": [
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryPhotoLibrary",
+            "NSPrivacyAccessedAPITypeReasons": ["UserSelectedPhotos"]
+          }
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.privacyfirst.social",
+      "permissions": [
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-local-authentication",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "We need access to your photo library to select random photos for sharing with your private groups."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#ffffff"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    }
+  }
+}
