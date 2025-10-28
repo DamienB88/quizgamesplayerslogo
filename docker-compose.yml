@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # React Native development server
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: privacy-social-app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "19000:19000"  # Expo Dev Server
+      - "19001:19001"  # Expo Dev Server (secure)
+      - "19002:19002"  # Expo Dev Tools
+      - "8081:8081"    # Metro Bundler
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - REACT_NATIVE_PACKAGER_HOSTNAME=${REACT_NATIVE_PACKAGER_HOSTNAME:-localhost}
+    env_file:
+      - .env
+    networks:
+      - privacy-social-network
+    stdin_open: true
+    tty: true
+    command: npm start
+
+  # PostgreSQL database for local development (mirrors Supabase)
+  postgres:
+    image: postgres:15-alpine
+    container_name: privacy-social-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: privacy_social_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - privacy-social-network
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: privacy-social-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - privacy-social-network
+    command: redis-server --appendonly yes
+
+  # Adminer for database management (optional)
+  adminer:
+    image: adminer:latest
+    container_name: privacy-social-adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - privacy-social-network
+    depends_on:
+      - postgres
+
+networks:
+  privacy-social-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

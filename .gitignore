@@ -1,0 +1,61 @@
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# Native builds
+ios/
+android/
+
+# Testing
+coverage/
+*.lcov
+
+# Production
+build/
+.next/
+out/
+
+# Misc
+.DS_Store
+*.pem
+*.p12
+*.mobileprovision
+
+# Debug
+*.log
+*.map
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Storybook
+.storybook-static/
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/
+
+# OS files
+Thumbs.db
