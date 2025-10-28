@@ -4,15 +4,26 @@
 
 export interface User {
   id: string;
-  phoneNumber: string;
+  email: string;
   username: string;
   displayName: string;
   avatarUrl?: string;
+  bio?: string;
   createdAt: string;
   updatedAt: string;
+  lastActiveAt: string;
   // Privacy preferences
   autoPublishMode: boolean;
   onboardingCompleted: boolean;
+}
+
+export interface Nickname {
+  id: string;
+  userId: string;
+  nickname: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Group {
@@ -119,3 +130,65 @@ export type RootStackParamList = {
   '(auth)': undefined;
   '(tabs)': undefined;
 };
+
+// Authentication types
+export interface AuthCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegistrationData extends AuthCredentials {
+  nickname: string;
+  username: string;
+}
+
+export interface AuthSession {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: number;
+}
+
+export interface AuthState {
+  user: User | null;
+  session: AuthSession | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: AppError | null;
+}
+
+// Encryption types
+export interface EncryptionKeys {
+  identityKeyPair: {
+    publicKey: string;
+    privateKey: string;
+  };
+  signedPreKey: {
+    keyId: number;
+    publicKey: string;
+    privateKey: string;
+    signature: string;
+  };
+  oneTimePreKeys: Array<{
+    keyId: number;
+    publicKey: string;
+    privateKey: string;
+  }>;
+}
+
+export interface EncryptedMessage {
+  ciphertext: string;
+  ephemeralKey: string;
+  iv: string;
+  mac: string;
+}
+
+// Secure storage types
+export interface SecureStorageData {
+  encryptionKeys?: EncryptionKeys;
+  authTokens?: {
+    accessToken: string;
+    refreshToken: string;
+  };
+  userPreferences?: Record<string, any>;
+}
