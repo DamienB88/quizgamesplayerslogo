@@ -7,72 +7,136 @@ import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '@/store/authStore';
-import { supabase } from '@/config/supabase';
+import { onboarding } from '@/services/onboarding';
+import { logger } from '@/services/logger';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withDelay,
+  withSequence,
+} from 'react-native-reanimated';
 
 export default function CompleteScreen() {
   const router = useRouter();
   const { user, setUser } = useAuthStore();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [autoPublishMode, setAutoPublishMode] = useState(false);
+
+  // Animation values
+  const emojiScale = useSharedValue(0);
+  const contentOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    // Get user's preference from onboarding state
+    const loadPreference = async () => {
+      const preference = await onboarding.getAutoPublishPreference();
+      setAutoPublishMode(preference);
+    };
+    loadPreference();
+
+    // Animate entrance
+    emojiScale.value = withSequence(
+      withSpring(1.2, { damping: 8 }),
+      withSpring(1, { damping: 10 })
+    );
+    contentOpacity.value = withDelay(300, withSpring(1));
+  }, []);
 
   const handleComplete = async () => {
-    if (!user) return;
+    if (!user) {
+      logger.error('No user found when completing onboarding');
+      return;
+    }
 
     setIsUpdating(true);
 
     try {
-      // Mark onboarding as completed in database
-      const { error } = await supabase
-        .from('users')
-        .update({ onboarding_completed: true })
-        .eq('id', user.id);
+      // Complete onboarding with user's preference
+      const success = await onboarding.completeOnboarding(
+        user.id,
+        autoPublishMode
+      );
 
-      if (error) {
-        console.error('Failed to update onboarding status:', error);
+      if (success) {
+        // Update local user state
+        setUser({
+          ...user,
+          onboardingCompleted: true,
+          autoPublishMode,
+        });
+
+        logger.info('Onboarding completed successfully', {
+          userId: user.id,
+          autoPublishMode,
+        });
+
+        // Navigate to main app
+        router.replace('/(tabs)/home');
+      } else {
+        logger.error('Failed to complete onboarding');
+        // Show error to user
+        alert('Failed to complete onboarding. Please try again.');
       }
-
-      // Update local user state
-      setUser({
-        ...user,
-        onboardingCompleted: true,
-      });
-
-      // Navigate to main app
-      router.replace('/(tabs)/home');
     } catch (error) {
-      console.error('Complete onboarding error:', error);
+      logger.error('Complete onboarding error', error);
+      alert('An error occurred. Please try again.');
     } finally {
       setIsUpdating(false);
     }
   };
 
+  const emojiAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: emojiScale.value }],
+  }));
+
+  const contentAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: contentOpacity.value,
+  }));
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.emoji}>🎉</Text>
-        <Text style={styles.title}>You're All Set!</Text>
-        <Text style={styles.subtitle}>
-          Welcome to Privacy Social. Start by creating your first private group and
-          inviting friends and family.
-        </Text>
+        <Animated.Text style={[styles.emoji, emojiAnimatedStyle]}>
+          🎉
+        </Animated.Text>
 
-        <View style={styles.features}>
-          <View style={styles.feature}>
-            <Text style={styles.featureNumber}>1</Text>
-            <Text style={styles.featureText}>Create a private group</Text>
-          </View>
+        <Animated.View style={contentAnimatedStyle}>
+          <Text style={styles.title}>You're All Set!</Text>
+          <Text style={styles.subtitle}>
+            Welcome to Privacy Social. Start by creating your first private group and
+            inviting friends and family.
+          </Text>
 
-          <View style={styles.feature}>
-            <Text style={styles.featureNumber}>2</Text>
-            <Text style={styles.featureText}>Invite friends and family</Text>
-          </View>
-
-          <View style={styles.feature}>
-            <Text style={styles.featureNumber}>3</Text>
-            <Text style={styles.featureText}>
-              Share random photos automatically
+          {/* Show selected mode */}
+          <View style={styles.selectedMode}>
+            <Text style={styles.selectedModeLabel}>Your Mode:</Text>
+            <Text style={styles.selectedModeValue}>
+              {autoPublishMode ? '🚀 Auto-Publish' : '🔍 Review'}
             </Text>
           </View>
-        </View>
+
+          <View style={styles.features}>
+            <View style={styles.feature}>
+              <Text style={styles.featureNumber}>1</Text>
+              <Text style={styles.featureText}>Create a private group</Text>
+            </View>
+
+            <View style={styles.feature}>
+              <Text style={styles.featureNumber}>2</Text>
+              <Text style={styles.featureText}>Invite friends and family</Text>
+            </View>
+
+            <View style={styles.feature}>
+              <Text style={styles.featureNumber}>3</Text>
+              <Text style={styles.featureText}>
+                {autoPublishMode
+                  ? 'Share random photos automatically'
+                  : 'Review and approve photos before sharing'}
+              </Text>
+            </View>
+          </View>
+        </Animated.View>
       </View>
 
       <View style={styles.footer}>
@@ -119,8 +183,28 @@ const styles = StyleSheet.create({
     color: '#666666',
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 40,
+    marginBottom: 24,
     paddingHorizontal: 20,
+  },
+  selectedMode: {
+    backgroundColor: '#F0F9FF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 32,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#007AFF',
+  },
+  selectedModeLabel: {
+    fontSize: 12,
+    color: '#666666',
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  selectedModeValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#007AFF',
   },
   features: {
     gap: 24,

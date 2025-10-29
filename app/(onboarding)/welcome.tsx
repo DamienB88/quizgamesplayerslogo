@@ -1,71 +1,101 @@
 /**
- * Welcome Onboarding Screen
- * Introduction to Privacy Social
+ * Animated Welcome Screen
+ * First screen with animated logo and app introduction
  */
 
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withSequence,
+  withDelay,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 
 export default function WelcomeScreen() {
   const router = useRouter();
 
+  // Animation values
+  const logoScale = useSharedValue(0);
+  const logoRotate = useSharedValue(0);
+  const titleOpacity = useSharedValue(0);
+  const titleTranslateY = useSharedValue(20);
+  const subtitleOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    // Animate logo entrance
+    logoScale.value = withSpring(1, {
+      damping: 10,
+      stiffness: 100,
+    });
+
+    logoRotate.value = withSequence(
+      withTiming(360, { duration: 800, easing: Easing.inOut(Easing.ease) }),
+      withTiming(0, { duration: 0 })
+    );
+
+    // Animate title
+    titleOpacity.value = withDelay(
+      400,
+      withTiming(1, { duration: 600 })
+    );
+    titleTranslateY.value = withDelay(
+      400,
+      withSpring(0, { damping: 12 })
+    );
+
+    // Animate subtitle
+    subtitleOpacity.value = withDelay(
+      800,
+      withTiming(1, { duration: 600 })
+    );
+
+    // Auto-navigate to carousel after animations
+    const timer = setTimeout(() => {
+      router.replace('/(onboarding)/carousel');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const logoAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { scale: logoScale.value },
+      { rotate: `${logoRotate.value}deg` },
+    ],
+  }));
+
+  const titleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+    transform: [{ translateY: titleTranslateY.value }],
+  }));
+
+  const subtitleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: subtitleOpacity.value,
+  }));
+
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.emoji}>🔒</Text>
-          <Text style={styles.title}>Welcome to Privacy Social</Text>
-          <Text style={styles.subtitle}>
-            Share random moments with complete privacy
-          </Text>
+      {/* Animated Logo */}
+      <Animated.View style={[styles.logoContainer, logoAnimatedStyle]}>
+        <View style={styles.logo}>
+          <Text style={styles.logoEmoji}>🔒</Text>
         </View>
+      </Animated.View>
 
-        <View style={styles.features}>
-          <View style={styles.feature}>
-            <Text style={styles.featureEmoji}>📸</Text>
-            <Text style={styles.featureTitle}>Random Photo Sharing</Text>
-            <Text style={styles.featureText}>
-              App randomly selects photos from your library to share with your
-              groups
-            </Text>
-          </View>
+      {/* Animated Title */}
+      <Animated.View style={titleAnimatedStyle}>
+        <Text style={styles.title}>Privacy Social</Text>
+      </Animated.View>
 
-          <View style={styles.feature}>
-            <Text style={styles.featureEmoji}>👥</Text>
-            <Text style={styles.featureTitle}>Private Groups Only</Text>
-            <Text style={styles.featureText}>
-              Create intimate groups with friends and family. No public posts, no
-              strangers
-            </Text>
-          </View>
-
-          <View style={styles.feature}>
-            <Text style={styles.featureEmoji}>⏰</Text>
-            <Text style={styles.featureTitle}>Auto-Delete After 30 Days</Text>
-            <Text style={styles.featureText}>
-              All photos automatically disappear after 30 days for maximum privacy
-            </Text>
-          </View>
-
-          <View style={styles.feature}>
-            <Text style={styles.featureEmoji}>🔐</Text>
-            <Text style={styles.featureTitle}>End-to-End Encrypted</Text>
-            <Text style={styles.featureText}>
-              Your photos are encrypted before upload. Only group members can see
-              them
-            </Text>
-          </View>
-        </View>
-      </ScrollView>
-
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => router.push('/(onboarding)/permissions')}
-        >
-          <Text style={styles.buttonText}>Get Started</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Animated Subtitle */}
+      <Animated.View style={subtitleAnimatedStyle}>
+        <Text style={styles.subtitle}>Share moments, protect privacy</Text>
+      </Animated.View>
     </View>
   );
 }
@@ -73,70 +103,41 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  content: {
-    flexGrow: 1,
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
-  header: {
-    alignItems: 'center',
-    paddingTop: 60,
-    paddingBottom: 40,
+  logoContainer: {
+    marginBottom: 40,
   },
-  emoji: {
+  logo: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  logoEmoji: {
     fontSize: 64,
-    marginBottom: 16,
   },
   title: {
-    fontSize: 28,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#000000',
+    color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666666',
-    textAlign: 'center',
-  },
-  features: {
-    gap: 32,
-  },
-  feature: {
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  featureEmoji: {
-    fontSize: 48,
     marginBottom: 12,
   },
-  featureTitle: {
+  subtitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#000000',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  featureText: {
-    fontSize: 14,
-    color: '#666666',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  footer: {
-    padding: 24,
-    paddingBottom: 40,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-  },
-  buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
+    opacity: 0.9,
+    textAlign: 'center',
   },
 });
