@@ -49,7 +49,7 @@
     "react-native-screens": "~3.29.0",
     "react-native-svg": "14.1.0",
     "react-native-webp-format": "^1.2.0",
-    "zustand": "^4.4.7"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",
