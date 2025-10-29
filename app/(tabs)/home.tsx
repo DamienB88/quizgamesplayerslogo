@@ -3,11 +3,58 @@
  * Main feed showing daily photos from groups
  */
 
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useAuthStore } from '@/store/authStore';
+import { usePhotoStore } from '@/store/photoStore';
+import { PhotoPreviewModal } from '@/components/PhotoPreviewModal';
 
 export default function HomeScreen() {
   const { user } = useAuthStore();
+  const {
+    currentPhoto,
+    showPreviewModal,
+    isProcessing,
+    isUploading,
+    uploadProgress,
+    error,
+    selectRandomPhoto,
+    uploadPhoto,
+    setShowPreviewModal,
+    clearError,
+  } = usePhotoStore();
+
+  const handleSelectPhoto = async () => {
+    clearError();
+    await selectRandomPhoto();
+  };
+
+  const handlePush = async (caption?: string) => {
+    if (!user) {
+      Alert.alert('Error', 'User not authenticated');
+      return;
+    }
+
+    // TODO: Get actual groupId from selected group
+    const groupId = 'demo-group-id';
+
+    const success = await uploadPhoto(user.id, groupId, caption);
+
+    if (success) {
+      Alert.alert('Success', 'Photo shared with your group!');
+      setShowPreviewModal(false);
+    } else {
+      Alert.alert('Error', error || 'Failed to upload photo');
+    }
+  };
+
+  const handleTryAgain = async () => {
+    await selectRandomPhoto();
+  };
+
+  const handleRefuse = () => {
+    setShowPreviewModal(false);
+    Alert.alert('Declined', 'Photo selection declined');
+  };
 
   return (
     <View style={styles.container}>
@@ -26,8 +73,31 @@ export default function HomeScreen() {
           <Text style={styles.placeholderText}>
             Photos disappear after 30 days for complete privacy.
           </Text>
+
+          {/* Demo Button */}
+          <TouchableOpacity
+            style={styles.demoButton}
+            onPress={handleSelectPhoto}
+            disabled={isProcessing}
+          >
+            <Text style={styles.demoButtonText}>
+              {isProcessing ? '🎲 Selecting...' : '🎲 Test Random Selection'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Photo Preview Modal */}
+      <PhotoPreviewModal
+        visible={showPreviewModal}
+        photo={currentPhoto}
+        onPush={handlePush}
+        onTryAgain={handleTryAgain}
+        onRefuse={handleRefuse}
+        onClose={() => setShowPreviewModal(false)}
+        isProcessing={isUploading}
+        uploadProgress={uploadProgress}
+      />
     </View>
   );
 }
@@ -81,5 +151,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
     lineHeight: 24,
+  },
+  demoButton: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginTop: 24,
+  },
+  demoButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
