@@ -63,7 +63,7 @@
     "@storybook/addon-react-native-web": "^0.0.20",
     "@storybook/blocks": "^7.6.7",
     "@storybook/react": "^7.6.7",
-    "@storybook/react-webpack5": "^7.6.7",
+    "@storybook/react-webpack5": "^10.0.0",
     "@storybook/test": "^7.6.7",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^12.4.3",
