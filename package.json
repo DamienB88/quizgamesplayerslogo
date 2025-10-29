@@ -32,7 +32,7 @@
     "expo-file-system": "~16.0.0",
     "expo-image-manipulator": "~12.0.0",
     "expo-image-picker": "~15.0.0",
-    "expo-local-authentication": "~14.0.0",
+    "expo-local-authentication": "~17.0.7",
     "expo-media-library": "~16.0.0",
     "expo-notifications": "~0.27.0",
     "expo-router": "~3.4.0",
