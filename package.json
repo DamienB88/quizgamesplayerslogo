@@ -30,7 +30,7 @@
     "expo-av": "~14.0.0",
     "expo-crypto": "~13.0.0",
     "expo-file-system": "~16.0.0",
-    "expo-image-manipulator": "~12.0.0",
+    "expo-image-manipulator": "~14.0.7",
     "expo-image-picker": "~15.0.0",
     "expo-local-authentication": "~14.0.0",
     "expo-media-library": "~16.0.0",
